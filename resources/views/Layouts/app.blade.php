@@ -15,6 +15,9 @@
 	<link href="{{ asset('LTR/assets/css/colors.css')}}" rel="stylesheet" type="text/css">
 	<!-- /global stylesheets -->
 
+	  <!-- Font Awesome -->
+	  <link rel="stylesheet" href="{{ asset('LTR/assets/font-awesome/css/font-awesome.min.css')}}">
+
 	<!-- Core JS files -->
 	<script type="text/javascript" src="{{ asset('LTR/assets/js/plugins/loaders/pace.min.js')}}"></script>
 	<script type="text/javascript" src="{{ asset('LTR/assets/js/core/libraries/jquery.min.js')}}"></script>
@@ -37,6 +40,13 @@
 
 
     <script type="text/javascript" src="{{ asset('LTR/assets/js/pages/form_layouts.js')}}"></script>
+
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+
+
 	<!-- /theme JS files -->
 
 
@@ -326,8 +336,9 @@
 								<li>
 									<a href="#"><i class="icon-copy"></i> <span>User management</span></a>
 									<ul>
-										<li><a href="/adduser" id="layout1">Create User</a></li>
-									
+										<li><a href="/admin/adduser" id="layout1">Create User</a></li>
+										<li><a href="/admin/view_user" id="layout1">View Users</a></li>
+										
 									</ul>
 								</li>
 								<li>
@@ -394,6 +405,10 @@
 
 	</div>
 	<!-- /page container -->
+
+
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
 
 </body>
 </html>
