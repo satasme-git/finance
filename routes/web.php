@@ -23,6 +23,7 @@ Route::get('/dashboard', function () {
 
 //login
 Route::post('/login_validate', 'App\Http\Controllers\LoginController@loginValidate');
+Route::get('/logout', 'App\Http\Controllers\LoginController@userlogout');
 
 //user management
 Route::get('/admin/adduser', 'App\Http\Controllers\UserController@create');

@@ -29,7 +29,9 @@ class LoginController extends Controller {
                 $user = User::where( 'user_username', '=', $request->user_username )->first();
                 if ( User::where( 'user_username', $request->user_username )->exists() ) {
                     if ( !empty( $user ) && Hash::check( $request->user_password, $user->user_password ) ) {
-
+                        Session::put('user_username', $request->user_username);
+                        Session::put('user_info', $user);
+                        Session::put('role_id', $request->role_id);
                         return redirect( '/dashboard' );
                     } else {
                         $request->session()->flash('msg', '<div id="alert-msg" class="alert alert-danger">Password is incorrect <a class="close" data-dismiss="alert">×</a> </div>');
@@ -46,4 +48,9 @@ class LoginController extends Controller {
             }
         }
     }
+    public function userlogout(Request $request){
+		$request->session()->forget('user_email');
+      
+		return view('login');
+	}
 }
