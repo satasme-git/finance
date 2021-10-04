@@ -11,170 +11,236 @@ use File;
 use Session;
 use Redirect;
 use Intervention\Image\ImageManagerStatic as Image;
-class UserController extends Controller
-{
+
+class UserController extends Controller {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        
-            $data['users'] = DB::table('users')
-            ->join('roles', 'users.role_id', '=', 'roles.id')
-            ->select('users.*', 'roles.role_name')
-             ->where([
-                ['users.status', '=', 1],
-            ])
-            ->get();
-        return view('Admin.User.ViewUsers',$data);
+    * Display a listing of the resource.
+    *
+    * @return \Illuminate\Http\Response
+    */
+
+    public function index() {
+
+        $data['users'] = DB::table( 'users' )
+        ->join( 'roles', 'users.role_id', '=', 'roles.id' )
+        ->select( 'users.*', 'roles.role_name' )
+        ->where( [
+            ['users.status', '=', 1],
+        ] )
+        ->get();
+        return view( 'Admin.User.ViewUsers', $data );
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
+    * Show the form for creating a new resource.
+    *
+    * @return \Illuminate\Http\Response
+    */
+
+    public function create() {
         $roles = Role::all();
-    
-        return view('Admin.User.CreateUser', compact('roles'));
+
+        return view( 'Admin.User.CreateUser', compact( 'roles' ) );
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        echo "?>>>>>>>>>>>>>>>>>>>asppppppppppppppd>";
-        // $user_first_Name = $request->get('fname');
-        // $user_last_Name = $request->get('lname');
-        // $user_email = $request->get('email');
-        // $user_nic_number = $request->get('nic');
-        // $user_DOB = $request->get('dob');
-        // $user_phone_number = $request->get('mobile');
-        // $user_username = $request->get('uname');
+    * Store a newly created resource in storage.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    * @return \Illuminate\Http\Response
+    */
 
-        // $user_address = $request->get('user_address');
-        // $role_id = $request->get('role_id');
-        // $id = $request->get('id');
+    public function store( Request $request ) {
+        $user_first_Name = $request->get( 'fname' );
+        $user_last_Name = $request->get( 'lname' );
+        $user_email = $request->get( 'email' );
+        $user_nic_number = $request->get( 'nic' );
+        $user_DOB = $request->get( 'dob' );
+        $user_phone_number = $request->get( 'mobile' );
+        $user_username = $request->get( 'uname' );
 
-        // $validationdata = array('user_first_Name' => $user_first_Name, 'user_last_Name' => $user_last_Name, 'user_email' => $user_email, 'user_nic_number' => $user_nic_number, 'user_DOB' => $user_DOB, 'user_phone_number' => $user_phone_number, 'user_username' => $user_username, 'user_address' => $user_address, 'role_id' => $role_id);
-        // $validationtype = array('user_first_Name' => 'required', 'user_last_Name' => 'required', 'user_email' => 'required|email', 'user_nic_number' => 'required', 'user_DOB' => 'required|not_in:0|date|date_format:Y-m-d|before:yesterday','user_phone_number' => 'required|digits:10','user_username' => 'required','user_address' => 'required', 'role_id' => 'required');
+        $user_address = $request->get( 'user_address' );
+        $role_id = $request->get( 'role_id' );
+        $id = $request->get( 'id' );
 
-        // $validator = Validator::make($validationdata, $validationtype);
+        $validationdata = array( 'user_first_Name' => $user_first_Name, 'user_last_Name' => $user_last_Name, 'user_email' => $user_email, 'user_nic_number' => $user_nic_number, 'user_DOB' => $user_DOB, 'user_phone_number' => $user_phone_number, 'user_username' => $user_username, 'user_address' => $user_address, 'role_id' => $role_id );
+        $validationtype = array( 'user_first_Name' => 'required', 'user_last_Name' => 'required', 'user_email' => 'required|email', 'user_nic_number' => 'required|max:12', 'user_DOB' => 'required|not_in:0|date|date_format:Y-m-d|before:yesterday', 'user_phone_number' => 'required|digits:10', 'user_username' => 'required', 'user_address' => 'required', 'role_id' => 'required' );
 
+        $validator = Validator::make( $validationdata, $validationtype );
 
-        // if ($validator->fails()) {
-        //     return redirect()->back()->withErrors($validator)->withInput();
-        // } else {
+        if ( $validator->fails() ) {
+            return redirect()->back()->withErrors( $validator )->withInput();
+        } else {
 
-        //     $data = [
-        //         'user_first_Name' => $user_first_Name,
-        //         'user_last_Name' => $user_last_Name,
-        //         'user_email' => $user_email,
-        //         'user_nic_number' => $user_nic_number,
-        //         'user_DOB' => $user_DOB,
-        //         'user_phone_number' => $user_phone_number,
-        //         'user_username' => $user_username,
-        //         'user_password' => Hash::make(123),
-        //         'user_address' => $user_address,
-        //         'role_id' => $role_id,
-        //         'status' => 1,
-        //     ];
-        //     $time = time();
-        //     if ($request->hasFile('user_image')) {
+            $data = [
+                'user_first_Name' => $user_first_Name,
+                'user_last_Name' => $user_last_Name,
+                'user_email' => $user_email,
+                'user_nic_number' => $user_nic_number,
+                'user_DOB' => $user_DOB,
+                'user_phone_number' => $user_phone_number,
+                'user_username' => $user_username,
+                'user_password' => Hash::make( 123 ),
+                'user_address' => $user_address,
+                'role_id' => $role_id,
+                'status' => 1,
+            ];
+            $time = time();
+            if ( $request->hasFile( 'user_image' ) ) {
 
-        //         $image = $request->file('user_image');
-        //         $imagename = $time . 'cfimg.' . $image->getClientOriginalExtension();
-        //         $destinationPath = public_path('/images/user/');
+                $image = $request->file( 'user_image' );
+                $imagename = $time . 'cfimg.' . $image->getClientOriginalExtension();
+                $destinationPath = public_path( '/images/user/' );
 
-        //         if (!File::isDirectory($destinationPath)) {
-        //             File::makeDirectory($destinationPath, 0777, true, true);
-        //         }
+                if ( !File::isDirectory( $destinationPath ) ) {
+                    File::makeDirectory( $destinationPath, 0777, true, true );
+                }
 
-        //         $filename = $image->getClientOriginalName();
-        //         $image_resize = \Image::make($image->getRealPath())->save($destinationPath . $imagename);
-        //         $data['user_image'] = $imagename;
+                $filename = $image->getClientOriginalName();
+                $image_resize = \Image::make( $image->getRealPath() )->save( $destinationPath . $imagename );
+                $data['user_image'] = $imagename;
 
-        //     }
-           
-            
-        //             $id = DB::table('users')->insertGetId($data);
-        //             $request->session()->flash('msg', 'insert');
-                
-            
-        //     return redirect('/admin/adduser');
-        // }
+            }
+
+            $id = DB::table( 'users' )->insertGetId( $data );
+            $request->session()->flash( 'msg', 'insert' );
+
+            return redirect( '/admin/adduser' );
+        }
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        
+    * Display the specified resource.
+    *
+    * @param  int  $id
+    * @return \Illuminate\Http\Response
+    */
+
+    public function show( $id ) {
+
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
+    * Show the form for editing the specified resource.
+    *
+    * @param  int  $id
+    * @return \Illuminate\Http\Response
+    */
+
+    public function edit( $id ) {
         $roles = Role::all();
-        $users = DB::table('users')
-        ->join('roles', 'users.role_id', '=', 'roles.id')
-        ->select('users.*', 'roles.role_name')
-        ->where('users.id', $id)
+        $users = DB::table( 'users' )
+        ->join( 'roles', 'users.role_id', '=', 'roles.id' )
+        ->select( 'users.*', 'roles.role_name' )
+        ->where( 'users.id', $id )
         ->get()->first();
 
-        return view('Admin.User.UpdateUser', compact('roles','users'));
-        
+        return view( 'Admin.User.UpdateUser', compact( 'roles', 'users' ) );
+
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        echo "?>>>>>>>>>>>>>>>>>>>asdasdasd>";
+    * Update the specified resource in storage.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    * @param  int  $id
+    * @return \Illuminate\Http\Response
+    */
+
+    public function update( Request $request, $id ) {
+        $user_first_Name = $request->get( 'fname' );
+        $user_last_Name = $request->get( 'lname' );
+        $user_email = $request->get( 'email' );
+        $user_nic_number = $request->get( 'nic' );
+        $user_DOB = $request->get( 'dob' );
+        $user_phone_number = $request->get( 'mobile' );
+        $user_username = $request->get( 'uname' );
+
+        $user_address = $request->get( 'user_address' );
+        $role_id = $request->get( 'role_id' );
+        // $id = $request->get( 'id' );
+
+
+        $validationdata = array( 'user_first_Name' => $user_first_Name, 'user_last_Name' => $user_last_Name, 'user_email' => $user_email, 'user_nic_number' => $user_nic_number, 'user_DOB' => $user_DOB, 'user_phone_number' => $user_phone_number, 'user_username' => $user_username, 'user_address' => $user_address, 'role_id' => $role_id );
+        $validationtype = array( 'user_first_Name' => 'required', 'user_last_Name' => 'required', 'user_email' => 'required|email', 'user_nic_number' => 'required|max:12', 'user_DOB' => 'required|not_in:0|date|date_format:Y-m-d|before:yesterday', 'user_phone_number' => 'required|digits:10', 'user_username' => 'required', 'user_address' => 'required', 'role_id' => 'required' );
+
+        $validator = Validator::make( $validationdata, $validationtype );
+
+        if ( $validator->fails() ) {
+            return redirect()->back()->withErrors( $validator )->withInput();
+        } else {
+
+            $data = [
+                'user_first_Name' => $user_first_Name,
+                'user_last_Name' => $user_last_Name,
+                'user_email' => $user_email,
+                'user_nic_number' => $user_nic_number,
+                'user_DOB' => $user_DOB,
+                'user_phone_number' => $user_phone_number,
+                'user_username' => $user_username,
+                'user_password' => Hash::make( 123 ),
+                'user_address' => $user_address,
+                'role_id' => $role_id,
+                'status' => 1,
+            ];
+            $time = time();
+            if ( $request->hasFile( 'user_image' ) ) {
+
+                $image = $request->file( 'user_image' );
+                $imagename = $time . 'cfimg.' . $image->getClientOriginalExtension();
+                $destinationPath = public_path( '/images/user/' );
+
+                if ( !File::isDirectory( $destinationPath ) ) {
+                    File::makeDirectory( $destinationPath, 0777, true, true );
+                }
+
+                $filename = $image->getClientOriginalName();
+                $image_resize = \Image::make( $image->getRealPath() )->save( $destinationPath . $imagename );
+                $data['user_image'] = $imagename;
+
+            }else{
+                $data['user_image']=$request->get( 'user_image1' );
+            }
+
+            DB::table( 'users' )->where( 'id', $id )->update( $data );
+            $request->session()->flash( 'msg', 'update' );
+
+            return redirect( '/admin/view_user' );
+        }
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-     
+    * Remove the specified resource from storage.
+    *
+    * @param  int  $id
+    * @return \Illuminate\Http\Response
+    */
+
+    public function destroy( $id ) {
+
+        $data['status']=0;
+        DB::table( 'users' )->where( 'id', $id )->update( $data );
+
+        $data['users'] = DB::table( 'users' )
+        ->join( 'roles', 'users.role_id', '=', 'roles.id' )
+        ->select( 'users.*', 'roles.role_name' )
+        ->where( [
+            ['users.status', '=', 1],
+        ] )
+        ->get();
+        return view( 'Admin.User.ViewUsers', $data );
+  
     }
-    public function getUserById($id)
-    {
-        $data = DB::table('users')
-        ->join('roles', 'users.role_id', '=', 'roles.id')
-        ->select('users.*', 'roles.role_name')
-        ->where('users.id', $id)
+
+    public function getUserById( $id ) {
+        $data = DB::table( 'users' )
+        ->join( 'roles', 'users.role_id', '=', 'roles.id' )
+        ->select( 'users.*', 'roles.role_name' )
+        ->where( 'users.id', $id )
         ->get();
 
-        return response()->json($data, 200);
+        return response()->json( $data, 200 );
     }
-   
+    
 
 }
