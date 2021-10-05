@@ -44,7 +44,8 @@
 	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
 
 
 	<!-- /theme JS files -->
@@ -179,13 +180,13 @@
 
 				<li class="dropdown dropdown-user">
 					<a class="dropdown-toggle" data-toggle="dropdown">
-						<img src="assets/images/placeholder.jpg" alt="">
+						<!-- <img src="assets/images/placeholder.jpg" alt=""> -->
 						<span>{{Session::get('user_info.user_username')}}</span>
 						<i class="caret"></i>
 					</a>
 
 					<ul class="dropdown-menu dropdown-menu-right">
-						<li><a href="#"><i class="icon-user-plus"></i> My profile</a></li>
+						<li><a href="{{url('/admin/update_profile/'.Session::get('user_info.id'))}}" ><i class="icon-user-plus"></i> My profile</a></li>
 						<!-- <li><a href="#"><i class="icon-coins"></i> {{Session::get('user_info.user_username')}}</a></li>
 						<li><a href="#"><span class="badge bg-teal-400 pull-right">58</span> <i class="icon-comment-discussion"></i> Messages</a></li> -->
 						<li class="divider"></li>
@@ -253,6 +254,15 @@
 									</ul>
 								</li>
 								<li>
+									<a href="#"><i class="icon-copy"></i> <span>Creditor management</span></a>
+									<ul>
+										<li><a href="/admin/addcreditor" id="layout1">Create Creditor</a></li>
+										<li><a href="/admin/view_creditor" id="layout1">View Creditors</a></li>
+										
+									</ul>
+								</li>
+								
+								<li>
 									<a href="#"><i class="icon-droplet2"></i> <span>Color system</span></a>
 									<ul>
 										<li><a href="colors_primary.html">Primary palette</a></li>
@@ -319,6 +329,7 @@
 
 
 <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
 
 
 </body>

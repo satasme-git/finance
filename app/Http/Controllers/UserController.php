@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Validator;
@@ -40,7 +41,10 @@ class UserController extends Controller {
     public function create() {
         $roles = Role::all();
 
-        return view( 'Admin.User.CreateUser', compact( 'roles' ) );
+        $max_id=DB::table('users')->max('id');
+        $number = sprintf("%05d", $max_id+1);
+        $emp_number="EMP". $number;
+        return view( 'Admin.User.CreateUser', compact( 'roles','emp_number' ) );
     }
 
     /**
@@ -51,6 +55,7 @@ class UserController extends Controller {
     */
 
     public function store( Request $request ) {
+        $user_emp_number = $request->get( 'user_emp_number' );
         $user_first_Name = $request->get( 'fname' );
         $user_last_Name = $request->get( 'lname' );
         $user_email = $request->get( 'email' );
@@ -63,8 +68,8 @@ class UserController extends Controller {
         $role_id = $request->get( 'role_id' );
         $id = $request->get( 'id' );
 
-        $validationdata = array( 'user_first_Name' => $user_first_Name, 'user_last_Name' => $user_last_Name, 'user_email' => $user_email, 'user_nic_number' => $user_nic_number, 'user_DOB' => $user_DOB, 'user_phone_number' => $user_phone_number, 'user_username' => $user_username, 'user_address' => $user_address, 'role_id' => $role_id );
-        $validationtype = array( 'user_first_Name' => 'required', 'user_last_Name' => 'required', 'user_email' => 'required|email', 'user_nic_number' => 'required|max:12', 'user_DOB' => 'required|not_in:0|date|date_format:Y-m-d|before:yesterday', 'user_phone_number' => 'required|digits:10', 'user_username' => 'required', 'user_address' => 'required', 'role_id' => 'required' );
+        $validationdata = array( 'user_emp_number'=>$user_emp_number,'user_first_Name' => $user_first_Name, 'user_last_Name' => $user_last_Name, 'user_email' => $user_email, 'user_nic_number' => $user_nic_number, 'user_DOB' => $user_DOB, 'user_phone_number' => $user_phone_number, 'user_username' => $user_username, 'user_address' => $user_address, 'role_id' => $role_id );
+        $validationtype = array( 'user_emp_number' => 'required','user_first_Name' => 'required', 'user_last_Name' => 'required', 'user_email' => 'required|email', 'user_nic_number' => 'required|max:12', 'user_DOB' => 'required|not_in:0|date|date_format:Y-m-d|before:yesterday', 'user_phone_number' => 'required|digits:10', 'user_username' => 'required', 'user_address' => 'required', 'role_id' => 'required' );
 
         $validator = Validator::make( $validationdata, $validationtype );
 
@@ -73,6 +78,7 @@ class UserController extends Controller {
         } else {
 
             $data = [
+                'user_emp_number' => $user_emp_number,
                 'user_first_Name' => $user_first_Name,
                 'user_last_Name' => $user_last_Name,
                 'user_email' => $user_email,
@@ -83,6 +89,8 @@ class UserController extends Controller {
                 'user_password' => Hash::make( 123 ),
                 'user_address' => $user_address,
                 'role_id' => $role_id,
+                'created_at'=>\Carbon\Carbon::now()->toDateTimeString(),
+                'updated_at'=>\Carbon\Carbon::now()->toDateTimeString(),
                 'status' => 1,
             ];
             $time = time();
@@ -148,6 +156,8 @@ class UserController extends Controller {
     */
 
     public function update( Request $request, $id ) {
+
+        $user_emp_number = $request->get( 'user_emp_number' );
         $user_first_Name = $request->get( 'fname' );
         $user_last_Name = $request->get( 'lname' );
         $user_email = $request->get( 'email' );
@@ -161,8 +171,8 @@ class UserController extends Controller {
         // $id = $request->get( 'id' );
 
 
-        $validationdata = array( 'user_first_Name' => $user_first_Name, 'user_last_Name' => $user_last_Name, 'user_email' => $user_email, 'user_nic_number' => $user_nic_number, 'user_DOB' => $user_DOB, 'user_phone_number' => $user_phone_number, 'user_username' => $user_username, 'user_address' => $user_address, 'role_id' => $role_id );
-        $validationtype = array( 'user_first_Name' => 'required', 'user_last_Name' => 'required', 'user_email' => 'required|email', 'user_nic_number' => 'required|max:12', 'user_DOB' => 'required|not_in:0|date|date_format:Y-m-d|before:yesterday', 'user_phone_number' => 'required|digits:10', 'user_username' => 'required', 'user_address' => 'required', 'role_id' => 'required' );
+        $validationdata = array( 'user_emp_number'=>$user_emp_number,'user_first_Name' => $user_first_Name, 'user_last_Name' => $user_last_Name, 'user_email' => $user_email, 'user_nic_number' => $user_nic_number, 'user_DOB' => $user_DOB, 'user_phone_number' => $user_phone_number, 'user_username' => $user_username, 'user_address' => $user_address, 'role_id' => $role_id );
+        $validationtype = array( 'user_emp_number' => 'required','user_first_Name' => 'required', 'user_last_Name' => 'required', 'user_email' => 'required|email', 'user_nic_number' => 'required|max:12', 'user_DOB' => 'required|not_in:0|date|date_format:Y-m-d|before:yesterday', 'user_phone_number' => 'required|digits:10', 'user_username' => 'required', 'user_address' => 'required', 'role_id' => 'required' );
 
         $validator = Validator::make( $validationdata, $validationtype );
 
@@ -171,6 +181,7 @@ class UserController extends Controller {
         } else {
 
             $data = [
+                'user_emp_number' => $user_emp_number,
                 'user_first_Name' => $user_first_Name,
                 'user_last_Name' => $user_last_Name,
                 'user_email' => $user_email,
@@ -181,6 +192,7 @@ class UserController extends Controller {
                 'user_password' => Hash::make( 123 ),
                 'user_address' => $user_address,
                 'role_id' => $role_id,
+                'updated_at'=>\Carbon\Carbon::now()->toDateTimeString(),
                 'status' => 1,
             ];
             $time = time();
@@ -240,6 +252,21 @@ class UserController extends Controller {
         ->get();
 
         return response()->json( $data, 200 );
+    }
+    public function check_uname(Request $request)
+    {
+
+        $msg;
+        if (User::where('user_username', '=', $request->username)->exists()) {
+            $msg = 1;
+        } else {
+            $msg = 0;
+        }
+
+        // return  $msg;
+
+        return json_encode($msg);
+
     }
     
 

@@ -20,8 +20,8 @@
 
 					<div class="breadcrumb-line">
 						<ul class="breadcrumb">
-							<li><a href="index.html"><i class="icon-home2 position-left"></i> Home</a></li>
-							<li><a href="form_layout_vertical.html">User</a></li>
+							<li><a href="/dashboard"><i class="icon-home2 position-left"></i> Home</a></li>
+							<li><a href="/admin/view_user">User</a></li>
 							<li class="active">Create user</li>
 						</ul>
 
@@ -55,6 +55,10 @@
             @if(Session::has('msg'))
                             {!! Session::get('msg') !!} 
              @endif
+
+			<?php
+
+		?> 
             <form action="{{url('/admin/create_user')}}" enctype="multipart/form-data" method="POST">
 			{{csrf_field()}}
 						<div class="panel panel-flat">
@@ -64,6 +68,20 @@
 										<fieldset>
 											<legend class="text-semibold"><i class="icon-reading position-left"></i> Basics details</legend>
 
+<div class="form-group {{ $errors->has('user_emp_number') ? ' has-error' : '' }}">
+												<label>Employee Number:</label>
+												<input type="text" class="form-control" readonly placeholder="Enter First Name" id="user_emp_number" value="{{$emp_number}}" name="user_emp_number"
+												@if($errors->any())
+                                               value="{{old('user_emp_number')}}""
+                                               @elseif(!empty($records->user_emp_number))
+                                               value="{{$records->user_emp_number}}"
+																	@endif />
+													@if ($errors->has('user_emp_number'))
+													<span class="help-block">
+														<strong style="color: #ff0000">{{ $errors->first('user_first_Name') }}</strong>
+													</span>
+													@endif
+											</div>
 											<div class="form-group {{ $errors->has('user_first_Name') ? ' has-error' : '' }}">
 												<label>Firsts name:</label>
 												<input type="text" class="form-control" placeholder="Enter First Name" id="fname" name="fname"
@@ -92,19 +110,7 @@
 													@endif
 											</div>
 
-											<div class="form-group {{ $errors->has('user_email') ? ' has-error' : '' }}">
-												<label>Email:</label>
-												<input type="text" placeholder="Enter Email Address" class="form-control" id="email" name="email"	@if($errors->any())
-                                               value="{{old('user_email')}}""
-                                               @elseif(!empty($records->user_email))
-                                               value="{{$records->user_email}}"
-																	@endif />
-													@if ($errors->has('user_email'))
-													<span class="help-block">
-														<strong style="color: #ff0000">{{ $errors->first('user_email') }}</strong>
-													</span>
-													@endif
-											</div>
+											
 											<div class="form-group {{ $errors->has('user_nic_number') ? ' has-error' : '' }}">
 												<label>NIC Number:</label>
 												<input type="text" class="form-control" placeholder="Enter NIC Number" id="nic" name="nic"	@if($errors->any())
@@ -150,7 +156,20 @@
 									<div class="col-md-6">
 										<fieldset>
 						                	<legend class="text-semibold"><i class="icon-copy"></i> Other details</legend>
-												<div class="form-group {{ $errors->has('user_address') ? ' has-error' : '' }}">
+											<div class="form-group {{ $errors->has('user_email') ? ' has-error' : '' }}">
+												<label>Email:</label>
+												<input type="text" placeholder="Enter Email Address" class="form-control" id="email" name="email"	@if($errors->any())
+                                               value="{{old('user_email')}}""
+                                               @elseif(!empty($records->user_email))
+                                               value="{{$records->user_email}}"
+																	@endif />
+													@if ($errors->has('user_email'))
+													<span class="help-block">
+														<strong style="color: #ff0000">{{ $errors->first('user_email') }}</strong>
+													</span>
+													@endif
+											</div>	
+											<div class="form-group {{ $errors->has('user_address') ? ' has-error' : '' }}">
 													<label>Phone Number:</label>
 													<input type="text" class="form-control" placeholder="Enter Phone Number" id="mobile" name="mobile"	@if($errors->any())
                                                value="{{old('user_phone_number')}}""
@@ -165,6 +184,7 @@
 												</div>
 												<div class="form-group {{ $errors->has('user_address') ? ' has-error' : '' }}">
 													<label>Usrname:</label>
+													<span class="pull-right badge badge-success" id="msg_nic"></span>
 													<input type="text" class="form-control" placeholder="Enter Phone Number" id="uname" name="uname"	@if($errors->any())
                                                value="{{old('user_username')}}""
                                                @elseif(!empty($records->user_username))
@@ -228,6 +248,35 @@
             }
         // $('.alert-msg').fadeIn().delay(1000).fadeOut();
 
+
+
+		$("#uname").keyup(function(){
+
+var uname= $('#uname').val();
+
+console.log(uname);
+
+
+$.ajax({
+
+		type: 'POST',
+		url: '/check_uname',
+		data: {
+			"_token": "{{ csrf_token() }}",
+			username: uname},
+		success: function(data){
+			//alert(data);
+		   if(data == 0){
+			//    $('#msg_nic').text('Available username!');
+			//    $("#msg_nic").css("background-color", "green");
+		   } else {
+			   $('#msg_nic').text('The username already exists!');
+			   $("#msg_nic").css("background-color", "red");
+		   }
+		}
+	});
+
+});
      
 		
     });

@@ -53,4 +53,13 @@ class LoginController extends Controller {
       
 		return view('login');
 	}
+    public function profile(Request $request,$id){
+   
+        $users = DB::table( 'users' )
+        ->join( 'roles', 'users.role_id', '=', 'roles.id' )
+        ->select( 'users.*', 'roles.role_name' )
+        ->where( 'users.id', $id )
+        ->get()->first();
+		return view('Admin.User.UpdateProfile', compact(  'users' ) );
+	}
 }

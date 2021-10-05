@@ -6,7 +6,7 @@
 
     <div class="page-header-content">
         <div class="page-title">
-            <h4><i class="icon-arrow-left52 position-left"></i> <span class="text-semibold">User</span> - update user</h4>
+            <h4><i class="icon-arrow-left52 position-left"></i> <span class="text-semibold"></span>User Profile </h4>
         </div>
 
         <div class="heading-elements">
@@ -18,32 +18,7 @@
         </div>
     </div>
 
-    <div class="breadcrumb-line">
-        <ul class="breadcrumb">
-        <li><a href="/dashboard"><i class="icon-home2 position-left"></i> Home</a></li>
-							<li><a href="/admin/view_user">User</a></li>
-            <li class="active">Update user</li>
-        </ul>
-
-        <ul class="breadcrumb-elements">
-            <li><a href="#"><i class="icon-comment-discussion position-left"></i> Support</a></li>
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <i class="icon-gear position-left"></i>
-                    Settings
-                    <span class="caret"></span>
-                </a>
-
-                <ul class="dropdown-menu dropdown-menu-right">
-                    <li><a href="#"><i class="icon-user-lock"></i> Account security</a></li>
-                    <li><a href="#"><i class="icon-statistics"></i> Analytics</a></li>
-                    <li><a href="#"><i class="icon-accessibility"></i> Accessibility</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#"><i class="icon-gear"></i> All settings</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
+   
 </div>
 <!-- /page header -->
 
@@ -64,20 +39,7 @@
                         <fieldset>
                             <legend class="text-semibold"><i class="icon-reading position-left"></i> Basics details</legend>
 
-                            <div class="form-group {{ $errors->has('user_emp_number') ? ' has-error' : '' }}">
-												<label>Employee Number:</label>
-												<input type="text" class="form-control" readonly placeholder="Enter First Name" id="user_emp_number" value="{{$users->user_emp_number}}" name="user_emp_number"
-												@if($errors->any())
-                                               value="{{old('user_emp_number')}}""
-                                               @elseif(!empty($records->user_emp_number))
-                                               value="{{$records->user_emp_number}}"
-																	@endif />
-													@if ($errors->has('user_emp_number'))
-													<span class="help-block">
-														<strong style="color: #ff0000">{{ $errors->first('user_first_Name') }}</strong>
-													</span>
-													@endif
-											</div>
+                          
                             <div class="form-group {{ $errors->has('user_first_Name') ? ' has-error' : '' }}">
                                 <label>Firsts name:</label>
                                 <input type="text" class="form-control" placeholder="Enter First Name" value="{{$users->user_first_Name}}" id="fname" name="fname"
@@ -187,7 +149,7 @@
                                 </span>
                                 @endif
                             </div>
-                            <div class="form-group {{ $errors->has('user_address') ? ' has-error' : '' }}">
+                            <div class="form-group {{ $errors->has('user_username') ? ' has-error' : '' }}">
                                 <label>Usrname:</label>
                                 <input type="text" class="form-control" placeholder="Enter Phone Number" value="{{$users->user_username}}" id="uname" name="uname"	@if($errors->any())
                                        value="{{old('user_username')}}""
@@ -200,7 +162,19 @@
                                 </span>
                                 @endif
                             </div>
-
+                            <div class="form-group {{ $errors->has('user_password') ? ' has-error' : '' }}">
+                                <label>Password:</label>
+                                <input type="text" class="form-control" placeholder="Enter Phone Number" value="{{$users->user_password}}" id="user_password" name="user_password"	@if($errors->any())
+                                       value="{{old('user_password')}}""
+                                       @elseif(!empty($users->user_password))
+                                       value="{{$users->user_password}}"
+                                       @endif />
+                                       @if ($errors->has('user_password'))
+                                       <span class="help-block">
+                                    <strong style="color: #ff0000">{{ $errors->first('user_password') }}</strong>
+                                </span>
+                                @endif
+                            </div>
                             <div class="form-group {{ $errors->has('user_address') ? ' has-error' : '' }}">
                                 <label>Address:</label>
                                 <textarea rows="5" cols="5" class="form-control" placeholder="Enter address here"  id="address" name="user_address">@if($errors->any()){{old('user_address')}}@elseif(!empty($records->user_address)){{$records->user_address}}@endif {{$users->user_address}}</textarea>
@@ -213,20 +187,7 @@
                                 </span>
                                 @endif
                             </div>
-                            <div class="form-group {{ $errors->has('role_id') ? ' has-error' : '' }}">
-                                <label>Select role:</label>
-                                <select data-placeholder="Select Role" class="form-control select"  id="role_id" name="role_id" >
-                                    <option></option>
-                                    @foreach($roles as $role)
-                                    <option  @if( $role->id==$users->role_id) selected  @endif value="{{$role->id}}">{{$role->role_name}} </option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('role_id'))
-                                <span class="help-block">
-                                    <strong style="color: #ff0000">{{ $errors->first('role_id') }}</strong>
-                                </span>
-                                @endif
-                            </div>
+                         
                         </fieldset>
                     </div>
                 </div>

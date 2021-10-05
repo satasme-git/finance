@@ -6,7 +6,7 @@
 
     <div class="page-header-content">
         <div class="page-title">
-            <h4><i class="icon-arrow-left52 position-left"></i> <span class="text-semibold">User</span> - View users</h4>
+            <h4><i class="icon-arrow-left52 position-left"></i> <span class="text-semibold">Creditor</span> - View creditors</h4>
         </div>
 
         <div class="heading-elements">
@@ -21,8 +21,8 @@
     <div class="breadcrumb-line">
         <ul class="breadcrumb">
         <li><a href="/dashboard"><i class="icon-home2 position-left"></i> Home</a></li>
-							<li><a href="/admin/view_user">User</a></li>
-            <li class="active">View users</li>
+							<li><a href="/admin/view_creditor">Creditor</a></li>
+            <li class="active">View creditors</li>
         </ul>
 
         <ul class="breadcrumb-elements">
@@ -56,37 +56,33 @@
                 <table class="table table-striped  table-hover dataTables-example" >
                     <thead>
                         <tr>
-                            <th>Image</th>
-                            <th>Name</th>
-                            <th>E-Mail</th>                       
-                            <th>NIC Number</th>                       
-                            <th>Phone Number</th>   
-                            <th>Role Name</th>   
+                            <!-- <th>Image</th> -->
+                            <th>Name</th>              
+                            <th>NIC Number</th>  
+                            <th>Date Of Birth</th>
+                            <th>Gender</th>                     
+                            <th>Phone Number</th> 
+                            <th>Collector name</th>    
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php $path = 'images/user/'; ?>
-                        @foreach($users as $user)
+                        @foreach($creditors as $creditor)
                         <tr>
+                            
+                            <td>{{$creditor->cre_first_Name}} {{$creditor->cre_last_Name}}</td>
+                            <td>{{$creditor->cre_nic_number}}</td>
+                            <td>{{$creditor->cre_DOB}}</td>
+                            <td>{{$creditor->cre_gender}}</td>
+                            <td>{{$creditor->cre_phone_number}}</td>
+                            <td>{{$creditor->user_first_Name}} {{$creditor->user_last_Name  }}</td>
                             <td>
-                                @if(!empty($user->user_image))
-                                <img src="{{asset($path.$user->user_image)}}" style="width:52px">
-                                @else
-                                <img src="{{asset('/')}}images/avatar.jpg" style="width:52px">
-                                @endif
-                            </td>
-                            <td>{{$user->user_first_Name}} {{$user->user_last_Name}}</td>
-                            <td>{{$user->user_email}}</td>
-                            <td>{{$user->user_nic_number}}</td>
-                            <td>{{$user->user_phone_number}}</td>
-                            <td>{{$user->role_name}}</td>
-                            <td>
-                                <button id="viewbtn" onclick="abc({{$user->id}});" type="button" class="  btn btn-default btn-sm " >
+                                <button id="viewbtn" onclick="abc({{$creditor->id}});" type="button" class="  btn btn-default btn-sm " >
                                     <i class="fa fa-file"></i> </button>
-                                        <!-- <a href="{{url('admin/addcustomers/'.$user->id)}}" class="btn btn-default"><i class="fa fa-file"></i></a> -->
-                                <a href="{{url('/admin/update_user/'.$user->id)}}" class="btn btn-info">   <i class="fa fa-edit"></i></a>
-                                <button onclick="deleteconfirm({{$user->id}})" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+                                     
+                                <a href="{{url('/admin/update_creditor/'.$creditor->id)}}" class="btn btn-info">   <i class="fa fa-edit"></i></a>
+                                <button onclick="deleteconfirm({{$creditor->id}})" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
                             </td>
 
                         </tr>
@@ -112,23 +108,23 @@
             <div class="modal-body" style="padding-top: 10px">
                 <div class="row" style="margin-top: 20px">
                     <div class="col-md-5" style="">
-                        <img id="myimg" style="margin-top:-20px" class="img-thumbnail" src="{{ asset('AdminLTE2/dist/img/avatar.jpg')}}" width="200px">
+                        <img id="myimg" style="margin-top:-20px" class="img-thumbnail" src="{{ asset('images/avatar.jpg')}}" width="200px">
 
                         <div class="form-group" style="margin-top:10px">
-                            <label for="email" style="font-weight:bold">User Name:</label>
+                            <label for="email" style="font-weight:bold">Creditor Name:</label>
                             <input type="text" style="border:none;margin:-10px"class="form-control"id="cus_fname">
                         </div>
-                        <div class="form-group" style="margin-top:10px">
+                        <!-- <div class="form-group" style="margin-top:10px">
                             <label for="email" style="font-weight:bold">Employee Number:</label>
                             <input type="text" style="border:none;margin:-10px"class="form-control"id="emp_number">
-                        </div>
+                        </div> -->
                         <div class="form-group" style="margin-top:10px">
                             <label for="email" style="font-weight:bold">Date Of Birth:</label>
                             <input type="text" style="border:none;margin:-10px"class="form-control"id="dob">
                         </div>
                         <div class="form-group" style="margin-top:10px">
-                            <label for="email" style="font-weight:bold">Username:</label>
-                            <input type="text" style="border:none;margin:-10px"class="form-control"id="uname">
+                            <label for="email" style="font-weight:bold">Gender:</label>
+                            <input type="text" style="border:none;margin:-10px"class="form-control"id="gender">
                         </div>
                         <div class="form-group" style="margin-top:10px">
                             <label for="email" style="font-weight:bold">Status:</label>
@@ -143,16 +139,16 @@
                         </div>
 
                         <div class="form-group" style="margin-top:10px">
-                            <label for="email" style="font-weight:bold"> User NIC number :</label>
+                            <label for="email" style="font-weight:bold"> Creditor NIC number :</label>
 
                             <input type="text" style="border:none;margin:-10px" class="form-control"id="cus_nic">
                         </div>
                         <div class="form-group" style="margin-top:10px">
-                            <label for="email" style="font-weight:bold">Joined date:</label>
+                            <label for="email" style="font-weight:bold">Registered date:</label>
                             <input type="text" style="border:none;margin:-10px"class="form-control"id="cus_jdate">
                         </div>
                         <div class="form-group" style="margin-top:10px">
-                            <label for="email" style="font-weight:bold">Role name:</label>
+                            <label for="email" style="font-weight:bold">Assigned collector name:</label>
                             <input type="text" style="border:none;margin:-10px"class="form-control"id="role_name">
                         </div>
                         <div style="width:auto;background-color:#f78a2c;margin-top:0px;margin-bottom:10px">
@@ -163,10 +159,10 @@
                             <label for="email" style="font-weight:bold">Contact number:</label>
                             <input type="text" style="border:none;margin:-10px" class="form-control" id="cus_contact">
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="email" style="font-weight:bold">Email address:</label>
                             <input type="text" style="border:none;margin:-10px" class="form-control" id="cus_email">
-                        </div>
+                        </div> -->
                         <!-- <div class="form-group">
                             <label for="email">Role:</label>
                             <input type="text" style="border:none;margin:-10px" class="form-control" id="cus_role">
@@ -220,30 +216,31 @@
 <script>
     function abc(id) {
     $.ajax({
-    url: "{{url('get_user_by_id')}}" + "/" + id, //this is your uri
+    url: "{{url('get_creditor_by_id')}}" + "/" + id, //this is your uri
             type: 'get', //this is your method
             success: function (data) {
             $('#exampleModal').modal("show");
-            $("#cus_fname").val(data[0].user_first_Name + " " + data[0].user_last_Name);
+            $("#cus_fname").val(data[0].cre_first_Name + " " + data[0].cre_last_Name);
             $("#cus_jdate").val(data[0].created_at);
-            $("#cus_nic").val(data[0].user_nic_number);
-            $("#cus_contact").val(data[0].user_phone_number);
+            $("#cus_nic").val(data[0].cre_nic_number);
+            $("#cus_contact").val(data[0].cre_phone_number);
             $("#cus_email").val(data[0].user_email);
-            $("#product_dis").val(data[0].user_address);
-            $("#dob").val(data[0].user_DOB);
+            $("#product_dis").val(data[0].cre_address);
+            $("#dob").val(data[0].cre_DOB);
+            $("#gender").val(data[0].cre_gender  );
             $("#emp_number").val(data[0].user_emp_number);
             $("#uname").val(data[0].user_username);
             if (data[0].status == 1){
-            $("#status").val("Active user");
+            $("#status").val("Active creditor");
             } else{
-            $("#status").val("inactive user");
+            $("#status").val("inactive creditor");
             }
 
-            $("#role_name").val(data[0].role_name);
-            if (data[0].user_image == ""){
+            $("#role_name").val(data[0].user_first_Name+" "+data[0].user_last_Name);
+            if (data[0].cre_image== "null"){
             $("#myimg").attr('src', "{{asset('images/avatar.jpg')}}");
             } else{
-            $("#myimg").attr('src', "{{asset('images/user/')}}/" + data[0].user_image);
+            $("#myimg").attr('src', "{{asset('images/creditor/')}}/" + data[0].cre_image);
             }
 
             }
@@ -253,7 +250,7 @@
     function deleteconfirm(id){
         swal({
                 title: "Are you sure?",
-                text: "Are you sure want to delete this user",
+                text: "Are you sure want to delete this creditor",
                 icon: "warning",
                 buttons: true,
                 dangerMode: true,
@@ -262,13 +259,13 @@
                 if (willDelete) {
          
                    
-                    swal("Poof! this user has been deleted!", {
+                    swal("Poof! this Creditor has been deleted!", {
                     icon: "success",
                  
                     }
                    
                     ).then((value) => {
-                        window.location.href="{{url('admin/deleteuser')}}"+ "/" + id;
+                        window.location.href="{{url('admin/deletecreditor')}}"+ "/" + id;
                          });
                     ;
                 } else {
