@@ -58,5 +58,11 @@ Route::get('/admin/update_loan/{id}', 'App\Http\Controllers\LoanController@edit'
 Route::post('/admin/edit_loan/{id}', 'App\Http\Controllers\LoanController@update');
 Route::get('/admin/deleteloan/{id}', 'App\Http\Controllers\LoanController@destroy');
 
+//web
+//Collector
+Route::resource('/web/view_asign_loans', 'App\Http\Controllers\CollectorController');
+// Route::get('/web/view_asign_loans', function () {
+//     return view('Web.Collector.ViewAssignCreditors');
+// });
 
 

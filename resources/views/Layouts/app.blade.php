@@ -66,7 +66,7 @@
 	<!-- Main navbar -->
 	<div class="navbar navbar-default header-highlight">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="index.html"><img src="{{ asset('LTR/assets/images/logo_light.png')}}" alt=""></a>
+			<a class="navbar-brand" href="index.html"><img src="{{ asset('LTR/assets/images/logo_light1.png')}}" alt=""></a>
 
 			<ul class="nav navbar-nav visible-xs-block">
 				<li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
@@ -243,10 +243,10 @@
 
 								<!-- Main -->
 								<li class="navigation-header"><span>Main</span> <i class="icon-menu" title="Main pages"></i></li>
-								<li class="active"><a href="/dashboard"><i class="icon-home4"></i> <span>Dashboard</span></a></li>
+								<li class="active"><a href="/dashboard"><i class="fa fa-tachometer"></i> <span>Dashboard</span></a></li>
 							
 								<li>
-									<a href="#"><i class="icon-copy"></i> <span>User management</span></a>
+									<a href="#"><i class="icon-user"></i> <span>User management</span></a>
 									<ul>
 										<li><a href="/admin/adduser" id="layout1">Create User</a></li>
 										<li><a href="/admin/view_user" id="layout1">View Users</a></li>
@@ -254,22 +254,21 @@
 									</ul>
 								</li>
 								<li>
-									<a href="#"><i class="icon-copy"></i> <span>Creditor management</span></a>
+									<a href="#"><i class="fa fa-address-card"></i> <span>Creditor management</span></a>
 									<ul>
 										<li><a href="/admin/addcreditor" id="layout1">Create Creditor</a></li>
-										<li><a href="/admin/view_creditor" id="layout1">View Creditors</a></li>
-										
+										<li><a href="/admin/view_creditor" id="layout1">View Creditors</a></li>	
 									</ul>
 								</li>
 								
 								<li>
-									<a href="#"><i class="icon-droplet2"></i> <span>Loan Management</span></a>
+									<a href="#"><i class="fa fa-money"></i> <span>Loan Management</span></a>
 									<ul>
 										<li><a href="/admin/createloan">Create Loan</a></li>
 										<li><a href="/admin/view_loan" id="layout1">View Loans</a></li>
-										
 									</ul>
 								</li>
+								
 <!-- 							
 								<li><a href="changelog.html"><i class="icon-list-unordered"></i> <span>Changelog <span class="label bg-blue-400">1.2.1</span></span></a></li>
 								<li><a href="../RTL/index.html"><i class="icon-width"></i> <span>RTL version</span></a></li>

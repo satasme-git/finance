@@ -32,7 +32,13 @@ class LoginController extends Controller {
                         Session::put('user_username', $request->user_username);
                         Session::put('user_info', $user);
                         Session::put('role_id', $request->role_id);
-                        return redirect( '/dashboard' );
+                      
+                        if(Session::get('user_info.role_id')==3){
+                            return redirect( '/web/view_asign_loans' );
+                        }else{
+                            return redirect( '/dashboard' );
+                        }
+                        
                     } else {
                         $request->session()->flash('msg', '<div id="alert-msg" class="alert alert-danger">Password is incorrect <a class="close" data-dismiss="alert">×</a> </div>');
                         return redirect( '/' );
