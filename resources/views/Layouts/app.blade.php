@@ -263,18 +263,17 @@
 								</li>
 								
 								<li>
-									<a href="#"><i class="icon-droplet2"></i> <span>Color system</span></a>
+									<a href="#"><i class="icon-droplet2"></i> <span>Loan Management</span></a>
 									<ul>
-										<li><a href="colors_primary.html">Primary palette</a></li>
-									
+										<li><a href="/admin/createloan">Create Loan</a></li>
+										<li><a href="/admin/view_loan" id="layout1">View Loans</a></li>
+										
 									</ul>
 								</li>
-							
+<!-- 							
 								<li><a href="changelog.html"><i class="icon-list-unordered"></i> <span>Changelog <span class="label bg-blue-400">1.2.1</span></span></a></li>
 								<li><a href="../RTL/index.html"><i class="icon-width"></i> <span>RTL version</span></a></li>
-								<!-- /main -->
-
-								<!-- Forms -->
+			
 								<li class="navigation-header"><span>Forms</span> <i class="icon-menu" title="Forms"></i></li>
 								<li>
 									<a href="#"><i class="icon-pencil3"></i> <span>Form components</span></a>
@@ -282,7 +281,7 @@
 										<li><a href="form_inputs_basic.html">Basic inputs</a></li>
 									
 									</ul>
-								</li>
+								</li> -->
 								
 								<!-- /page kits -->
 

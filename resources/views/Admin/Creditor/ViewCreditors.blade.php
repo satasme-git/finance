@@ -20,8 +20,8 @@
 
     <div class="breadcrumb-line">
         <ul class="breadcrumb">
-        <li><a href="/dashboard"><i class="icon-home2 position-left"></i> Home</a></li>
-							<li><a href="/admin/view_creditor">Creditor</a></li>
+            <li><a href="/dashboard"><i class="icon-home2 position-left"></i> Home</a></li>
+            <li><a href="/admin/view_creditor">Creditor</a></li>
             <li class="active">View creditors</li>
         </ul>
 
@@ -70,7 +70,7 @@
                         <?php $path = 'images/user/'; ?>
                         @foreach($creditors as $creditor)
                         <tr>
-                            
+
                             <td>{{$creditor->cre_first_Name}} {{$creditor->cre_last_Name}}</td>
                             <td>{{$creditor->cre_nic_number}}</td>
                             <td>{{$creditor->cre_DOB}}</td>
@@ -80,7 +80,7 @@
                             <td>
                                 <button id="viewbtn" onclick="abc({{$creditor->id}});" type="button" class="  btn btn-default btn-sm " >
                                     <i class="fa fa-file"></i> </button>
-                                     
+
                                 <a href="{{url('/admin/update_creditor/'.$creditor->id)}}" class="btn btn-info">   <i class="fa fa-edit"></i></a>
                                 <button onclick="deleteconfirm({{$creditor->id}})" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
                             </td>
@@ -186,8 +186,7 @@
     $(document).ready(function(){
     $('.dataTables-example').DataTable({
     });
-    });
-</script>
+    });</script>
 <script>
     $(document).ready(function(){
 
@@ -210,9 +209,7 @@
     });
     }
 
-    });
-    
-</script>
+    });</script>
 <script>
     function abc(id) {
     $.ajax({
@@ -227,7 +224,7 @@
             $("#cus_email").val(data[0].user_email);
             $("#product_dis").val(data[0].cre_address);
             $("#dob").val(data[0].cre_DOB);
-            $("#gender").val(data[0].cre_gender  );
+            $("#gender").val(data[0].cre_gender);
             $("#emp_number").val(data[0].user_emp_number);
             $("#uname").val(data[0].user_username);
             if (data[0].status == 1){
@@ -236,8 +233,8 @@
             $("#status").val("inactive creditor");
             }
 
-            $("#role_name").val(data[0].user_first_Name+" "+data[0].user_last_Name);
-            if (data[0].cre_image== "null"){
+            $("#role_name").val(data[0].user_first_Name + " " + data[0].user_last_Name);
+            if (data[0].cre_image == "null"){
             $("#myimg").attr('src', "{{asset('images/avatar.jpg')}}");
             } else{
             $("#myimg").attr('src', "{{asset('images/creditor/')}}/" + data[0].cre_image);
@@ -248,30 +245,29 @@
     }
 
     function deleteconfirm(id){
-        swal({
-                title: "Are you sure?",
-                text: "Are you sure want to delete this creditor",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-                })
-                .then((willDelete) => {
-                if (willDelete) {
-         
-                   
-                    swal("Poof! this Creditor has been deleted!", {
-                    icon: "success",
-                 
-                    }
-                   
-                    ).then((value) => {
-                        window.location.href="{{url('admin/deletecreditor')}}"+ "/" + id;
-                         });
-                    ;
-                } else {
-                    swal("Your imaginary file is safe!");
-                }
-                });
-		}
+    swal({
+    title: "Are you sure?",
+            text: "Are you sure want to delete this creditor",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+    })
+            .then((willDelete) => {
+            if (willDelete) {
+
+
+            swal("Poof! this Creditor has been deleted!", {
+            icon: "success",
+            }
+
+            ).then((value) => {
+            window.location.href = "{{url('admin/deletecreditor')}}" + "/" + id;
+            });
+            ;
+            } else {
+            swal("Your imaginary file is safe!");
+            }
+            });
+    }
 </script>
 @endsection
