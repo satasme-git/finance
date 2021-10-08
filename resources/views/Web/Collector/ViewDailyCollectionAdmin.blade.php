@@ -49,9 +49,66 @@
 
 
 <!-- Content area -->
+<div class="content" style="margin-bottom:-40px">
+<div class="col-md-12" style="background-color: #e0e0e0;padding-top:5px">
+
+
+            
+<form action="/serch_by_collector_id" method="POST">
+  {{csrf_field()}}
+  <div class="col-md-4">
+      <div class="form-group {{ $errors->has('search') ? ' has-error' : '' }}">
+          <label for="email">Collector name:</label>
+          <input type="hidden" class="form-control" id="collector_id" name="collector_id" placeholder="Enter collector name">
+          <input type="text" class="form-control" id="search" name="search" placeholder="Enter collector name">
+      </div>
+      @if ($errors->has('search'))
+      <span class="help-block">
+          <strong style="color: #ff0000">{{ $errors->first('search') }}</strong>
+      </span>
+      @endif
+  </div>
+  <div  class="col-md-3">
+      <div class="form-group {{ $errors->has('start_date') ? ' has-error' : '' }}">
+          <label for="email">Start Date:</label>
+          <input type="date" class="form-control" placeholder="Enter email" name="start_date" id="start_date">
+      </div>
+      @if ($errors->has('start_date'))
+      <span class="help-block">
+          <strong style="color: #ff0000">{{ $errors->first('start_date') }}</strong>
+      </span>
+      @endif
+  </div>
+  <div  class="col-md-3">
+      <div class="form-group {{ $errors->has('end_date') ? ' has-error' : '' }}">
+          <label for="email">End Date:</label>
+          <input type="date" class="form-control" placeholder="Enter email" name="end_date" id="end_date">
+      </div>
+      @if ($errors->has('end_date'))
+      <span class="help-block">
+          <strong style="color: #ff0000">{{ $errors->first('end_date') }}</strong>
+      </span>
+      @endif
+  </div>
+
+  <div  class="col-md-2">
+      <div class="form-group " style="padding-top:25px">
+          <!-- <label for="email">.</label>  -->
+          <input type="submit" class="btn btn-success btn-sm" placeholder="Enter email"  value="Search">
+        
+
+      </div>
+
+  </div>
+  <input type="hidden" id="memberid" name="memberid"/>
+</form>
+</div>
+</div>
 <div class="content">
+
     <div class="panel panel-flat">
         <div class="panel-body">
+            
             <div class="table-responsive">
                 <table class="table table-striped  table-hover dataTables-example" >
                     <thead>
@@ -60,35 +117,26 @@
                             <th>Amount</th>
                             <th>Rental frequancy</th>                       
                             <th>Loan Period</th>                       
-                            <th>Loan With Interest</th>   
-                            <th>Crediter NIC</th>   
-                            <th>Status</th>
+                        
                             <th style="width:100px">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php $path = 'images/user/'; ?>
-                        @foreach($loans as $loan)
+                        @foreach($collections as $collection)
                         <tr>
-                           
-                            <td>{{$loan->loan_number}}</td>
-                            <td>{{$loan->loan_amount}}</td>
-                            <td>{{$loan->loan_rental_freq}}</td>
-                            <td>{{$loan->loan_period}}</td>
-                            <td>{{$loan->loan_with_int}}</td>
-                            <td>{{$loan->cre_nic_number}}</td>
-                            @if($loan->status==1)
-                            <td><span class="label bg-success">Pending</span></td>
-                            @elseif($loan->status==2)
-                            <td><span class="label bg-grey">Closeed</span></td>
-                            @endif
+                            <td>{{$collection->installement_date}}</td>
+                            <td>{{$collection->loan_number}}</td>
+                            <td>{{$collection->pay_amount}}</td>
+                            <td>{{$collection->cre_nic_number}}</td>
+                         
 
                             <td>
-                                <button id="viewbtn" onclick="abc({{$loan->id}});" type="button" class="  btn btn-default btn-sm " >
+                                <button id="viewbtn" onclick="abc({{$collection->id}});" type="button" class="  btn btn-default btn-sm " >
                                     <i class="fa fa-file"></i> </button>
                                      
-                                <a href="{{url('/admin/update_loan/'.$loan->id)}}" class="btn btn-info">   <i class="fa fa-edit"></i></a>
-                                <button onclick="deleteconfirm({{$loan->id}})" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+                                <a href="{{url('/admin/update_loan/'.$collection->id)}}" class="btn btn-info">   <i class="fa fa-edit"></i></a>
+                                <button onclick="deleteconfirm({{$collection->id}})" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
                             </td>
 
                         </tr>
@@ -296,5 +344,23 @@
                 }
                 });
 		}
+
+        $('#search').autocomplete({
+
+        source: "{{URL::to('autocomplete2-searchCollector')}}",
+        select: function (key, value) {
+
+            console.log(value);
+            $('#collector_id').val(value.item.id);
+            // $('#cre_first_Name').val(value.item.cre_first_Name);
+            // $('#last_name').val(value.item.last_Name);
+            // $('#cre_phone_number').val(value.item.cre_phone_number);
+            // $('#cre_address').val(value.item.cre_address);
+            // $('#cre_id').val(value.item.id);
+            
+       
+
+        }
+})
 </script>
 @endsection

@@ -61,8 +61,20 @@ Route::get('/admin/deleteloan/{id}', 'App\Http\Controllers\LoanController@destro
 //web
 //Collector
 Route::resource('/web/view_asign_loans', 'App\Http\Controllers\CollectorController');
-// Route::get('/web/view_asign_loans', function () {
-//     return view('Web.Collector.ViewAssignCreditors');
-// });
+Route::get('/web/daily_collection', 'App\Http\Controllers\CollectorController@create');
+Route::get('/autocomplete2-searchLoan','App\Http\Controllers\CollectorController@searchLoan');
+Route::post('/admin/daily_collection', 'App\Http\Controllers\CollectorController@store');
+Route::post('/loan_outstanding','App\Http\Controllers\CollectorController@loan_outstanding');
+
+//reports
+Route::get('/admin/view_daily_collection', 'App\Http\Controllers\CollectorController@view_daily_collections');
+Route::get('/autocomplete2-searchCollector','App\Http\Controllers\CollectorController@searchCollector');
+Route::post('/serch_by_collector_id','App\Http\Controllers\CollectorController@serch_by_collector_id');
+
+Route::get('/admin/view_loan_outstanding','App\Http\Controllers\ReportController@view_loan_outstanding');
+
+
+
+
 
 

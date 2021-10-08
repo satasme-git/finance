@@ -27,6 +27,7 @@ class LoanController extends Controller
         ->where( [
             ['loans.status', '!=', 0],
         ] )
+        ->orderBy('id', 'DESC')
         ->get();
         return view( 'Admin.Loan.ViewLoans', $data );
     }
@@ -230,7 +231,12 @@ class LoanController extends Controller
     {
         $msg;
 
-        $count2 = \DB::table('loans')->where('cre_id', '<=', $request->cre_id)->count();
+        $count2 =DB::table('loans')
+                 ->select(DB::raw('count(*) as category_count'))
+                 ->where('cre_id', $request->cre_id)
+                 ->get();
+
+        // $count2 = \DB::table('loans')->where('cre_id', '<=', $request->cre_id)->count();
 
         // if (Loan::where('user_username', '=', $request->cre_id)->exists()) {
         //     $msg = 1;

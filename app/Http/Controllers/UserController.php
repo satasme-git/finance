@@ -28,6 +28,7 @@ class UserController extends Controller {
         ->where( [
             ['users.status', '=', 1],
         ] )
+        ->orderBy('id', 'DESC')
         ->get();
         return view( 'Admin.User.ViewUsers', $data );
     }

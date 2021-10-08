@@ -27,6 +27,7 @@ class CreditorController extends Controller
         ->where( [
             ['creditors.status', '=', 1],
         ] )
+        ->orderBy('id', 'DESC')
         ->get();
         return view( 'Admin.Creditor.ViewCreditors', $data );
     }

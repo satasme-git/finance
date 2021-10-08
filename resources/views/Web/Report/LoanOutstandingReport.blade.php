@@ -49,47 +49,49 @@
 
 
 <!-- Content area -->
+<div class="content" style="margin-bottom:-40px">
+
+</div>
 <div class="content">
+
     <div class="panel panel-flat">
         <div class="panel-body">
+            
             <div class="table-responsive">
                 <table class="table table-striped  table-hover dataTables-example" >
                     <thead>
                         <tr>
                             <th>Loan Number</th>
-                            <th>Amount</th>
-                            <th>Rental frequancy</th>                       
-                            <th>Loan Period</th>                       
-                            <th>Loan With Interest</th>   
-                            <th>Crediter NIC</th>   
-                            <th>Status</th>
-                            <th style="width:100px">Action</th>
+                            <th>Creditor NIC</th>
+                            <th>Creditor Name</th>
+                            <th>Loan Amount</th>
+                            <th>Loan With Interest</th>                       
+                            <th>Total Paid</th>                       
+                            <th>Outstandin Amount</th>     
+                            <!-- <th style="width:100px">Action</th> -->
                         </tr>
                     </thead>
                     <tbody>
                         <?php $path = 'images/user/'; ?>
-                        @foreach($loans as $loan)
+                        @foreach($collections as $collection)
                         <tr>
-                           
-                            <td>{{$loan->loan_number}}</td>
-                            <td>{{$loan->loan_amount}}</td>
-                            <td>{{$loan->loan_rental_freq}}</td>
-                            <td>{{$loan->loan_period}}</td>
-                            <td>{{$loan->loan_with_int}}</td>
-                            <td>{{$loan->cre_nic_number}}</td>
-                            @if($loan->status==1)
-                            <td><span class="label bg-success">Pending</span></td>
-                            @elseif($loan->status==2)
-                            <td><span class="label bg-grey">Closeed</span></td>
-                            @endif
 
-                            <td>
-                                <button id="viewbtn" onclick="abc({{$loan->id}});" type="button" class="  btn btn-default btn-sm " >
+                            <td>{{$collection->loan_number}}</td>
+                            <td>{{$collection->cre_nic_number}}</td>
+                            <td>{{$collection->cre_first_Name}} {{$collection->cre_last_Name}}</td>
+                            <td>{{$collection->loan_amount}}</td>
+                            <td>{{$collection->loan_with_int}}</td>
+                            <td style="font-weight:bold;font-size:15px">{{$collection->payment_amount}}</td>
+                            <td  style="font-weight:bold;color:red;font-size:15px">{{$collection->loan_with_int-$collection->payment_amount}}</td>
+                         
+
+                            <!-- <td>
+                                <button id="viewbtn" onclick="abc({{$collection->id}});" type="button" class="  btn btn-default btn-sm " >
                                     <i class="fa fa-file"></i> </button>
                                      
-                                <a href="{{url('/admin/update_loan/'.$loan->id)}}" class="btn btn-info">   <i class="fa fa-edit"></i></a>
-                                <button onclick="deleteconfirm({{$loan->id}})" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
-                            </td>
+                                <a href="{{url('/admin/update_loan/'.$collection->id)}}" class="btn btn-info">   <i class="fa fa-edit"></i></a>
+                                <button onclick="deleteconfirm({{$collection->id}})" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+                            </td> -->
 
                         </tr>
                         @endforeach
@@ -296,5 +298,23 @@
                 }
                 });
 		}
+
+        $('#search').autocomplete({
+
+        source: "{{URL::to('autocomplete2-searchCollector')}}",
+        select: function (key, value) {
+
+            console.log(value);
+            $('#collector_id').val(value.item.id);
+            // $('#cre_first_Name').val(value.item.cre_first_Name);
+            // $('#last_name').val(value.item.last_Name);
+            // $('#cre_phone_number').val(value.item.cre_phone_number);
+            // $('#cre_address').val(value.item.cre_address);
+            // $('#cre_id').val(value.item.id);
+            
+       
+
+        }
+})
 </script>
 @endsection
