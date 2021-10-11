@@ -253,6 +253,88 @@ class CollectorController extends Controller
  
 
         }
+        public function daily_collection_by_nic(Request $request)
+        {
+            $data['loans']="";
+            return view('Web.Collector.ViewCreditorByNIC',$data );
+
+
+        } 
+        public function searchloanbycreditor(Request $request) {
         
+        $search = $request->term;
+        $students = DB::table('creditors')
+             
+                ->select('creditors.*')
+                ->where([
+                    ['cre_nic_number', 'LIKE', '%' . $search . '%'],
+                    ['status', '=', 1],
+                    ['creditors.user_id', '=', Session::get('user_info.id')],
+                    
+                    ])
+                ->get();
+        $data = [];
+        foreach ($students as $key => $value) {
+            $data[] = ['id' => $value->id, 'value' => $value->cre_nic_number,
+                    // 'user_id'=> $id,
+                    
+            ];
+        }
+        return response($data);
+
+    }
+
+
+    public function serch_by_creditor_nic(Request $request) {
+
+      
+        $creditor_nic = $request->search;
+        $creditor_id = $request->creditor_id;
+        
+        // echo "dsasdasdasd".$creditor_nic." / ". $creditor_id;
+
+        // $validationdata = array('search' => $creditor_nic);
+        // $validationtype = array('search' => 'required');
+
+        // $validator = Validator::make($validationdata, $validationtype);
+        
+        // if ( $validator->fails() ) {
+        //     return redirect()->back()->withErrors( $validator )->withInput();
+        // }
+        // else{
+                   
+                        $data['loans'] = DB::table( 'loans' )
+                        ->join( 'creditors', 'loans.cre_id', '=', 'creditors.id' )
+                        ->select( 'loans.*', 'creditors.cre_first_Name', 'creditors.cre_last_Name', 'creditors.cre_nic_number')
+                        ->where( [
+                            ['loans.status', '=', 1],
+                            ['creditors.id', '=', $creditor_id],
+                        ] )
+                        ->orderBy('id', 'DESC')
+                        ->get();
+                    
+                    return view('Web.Collector.ViewCreditorByNIC',$data );
+
+        // }
+
+
+    }
+    public function dailycollectionbyloan_id($id)
+    
+    {
+
+        $data['balance'] = DB::table('daily_collections')->where('loan_id', $id)->sum('pay_amount');
+        $collections = DB::table('loans')
+                ->join( 'creditors', 'loans.cre_id', '=', 'creditors.id' )
+                ->select('loans.*', 'creditors.cre_first_Name' , 'creditors.cre_last_Name', 'creditors.cre_nic_number', 'creditors.cre_phone_number', 'creditors.cre_address', 'creditors.id AS cre_id')
+                ->where([
+                    ['loans.id', '=',  $id],
+                    ['loans.status', '=', 1],
+                    ])
+                ->get()->first();
+
+        return view( 'Web.Collector.DailyCollectionByLoanNumber',$data,compact( 'collections'));
+
+    }
     
 }

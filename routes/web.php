@@ -65,6 +65,13 @@ Route::get('/web/daily_collection', 'App\Http\Controllers\CollectorController@cr
 Route::get('/autocomplete2-searchLoan','App\Http\Controllers\CollectorController@searchLoan');
 Route::post('/admin/daily_collection', 'App\Http\Controllers\CollectorController@store');
 Route::post('/loan_outstanding','App\Http\Controllers\CollectorController@loan_outstanding');
+Route::get('/web/daily_collection_by_nic','App\Http\Controllers\CollectorController@daily_collection_by_nic');
+Route::get('/autocomplete2-searchloanbycreditor','App\Http\Controllers\CollectorController@searchloanbycreditor');
+Route::post('/serch_by_creditor_nic','App\Http\Controllers\CollectorController@serch_by_creditor_nic');
+Route::get('/admin/dailycollectionbyloan_id/{id}', 'App\Http\Controllers\CollectorController@dailycollectionbyloan_id');
+
+
+
 
 //reports
 Route::get('/admin/view_daily_collection', 'App\Http\Controllers\CollectorController@view_daily_collections');
@@ -72,6 +79,7 @@ Route::get('/autocomplete2-searchCollector','App\Http\Controllers\CollectorContr
 Route::post('/serch_by_collector_id','App\Http\Controllers\CollectorController@serch_by_collector_id');
 
 Route::get('/admin/view_loan_outstanding','App\Http\Controllers\ReportController@view_loan_outstanding');
+Route::get('/admin/outstanding_by_loan_id/{id}','App\Http\Controllers\ReportController@outstanding_by_loan_id');
 
 
 

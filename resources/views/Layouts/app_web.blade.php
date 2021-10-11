@@ -161,6 +161,11 @@
 					</a>
 
 				</li>
+				<li class="dropdown">
+					<a href="/web/daily_collection_by_nic" class="dropdown-toggle">Daily collection By NIC
+					</a>
+
+				</li>
 			</ul>
 			
 			<!-- <p class="navbar-text"><span class="label bg-success">Online</span></p>

@@ -66,7 +66,7 @@
 	<!-- Main navbar -->
 	<div class="navbar navbar-default header-highlight">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="index.html"><img src="{{ asset('LTR/assets/images/logo_light1.png')}}" alt=""></a>
+			<a class="navbar-brand" href=""><img src="{{ asset('LTR/assets/images/logo_light1.png')}}" alt=""></a>
 
 			<ul class="nav navbar-nav visible-xs-block">
 				<li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
@@ -139,7 +139,14 @@
 						<div class="category-content">
 							<div class="media">
                               
-								<a href="#" class="media-left"><img src="{{ asset('/images/user/')}}/{{Session::get('user_info.user_image') }}" class="img-circle img-sm" alt=""></a>
+								<a href="#" class="media-left">
+									@if(Session::get('user_info.user_image')=="" )
+									<img src="{{ asset('/images/user/')}}/avatar.jpg" class="img-circle img-sm" alt="">
+									@else
+									<img src="{{ asset('/images/user/')}}/{{Session::get('user_info.user_image') }}" class="img-circle img-sm" alt="">
+									@endif
+								
+								</a>
 								<div class="media-body">
 									<span class="media-heading text-semibold">{{Session::get('user_info.user_first_Name') }} {{Session::get('user_info.user_last_Name') }}</span>
 									<div class="text-size-mini text-muted">

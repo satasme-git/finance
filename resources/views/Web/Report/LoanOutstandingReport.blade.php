@@ -6,7 +6,7 @@
 
     <div class="page-header-content">
         <div class="page-title">
-            <h4><i class="icon-arrow-left52 position-left"></i> <span class="text-semibold">Loan</span> - View loans</h4>
+            <h4><i class="icon-arrow-left52 position-left"></i> <span class="text-semibold">Report</span> - Outstandig</h4>
         </div>
 
         <div class="heading-elements">
@@ -21,8 +21,8 @@
     <div class="breadcrumb-line">
         <ul class="breadcrumb">
         <li><a href="/dashboard"><i class="icon-home2 position-left"></i> Home</a></li>
-							<li><a href="/admin/view_loan">Loan</a></li>
-            <li class="active">View loans</li>
+							<li><a href="/admin/">Report</a></li>
+            <li class="active">Outstanding</li>
         </ul>
 
         <ul class="breadcrumb-elements">
@@ -68,13 +68,14 @@
                             <th>Loan With Interest</th>                       
                             <th>Total Paid</th>                       
                             <th>Outstandin Amount</th>     
-                            <!-- <th style="width:100px">Action</th> -->
+                            <th >Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php $path = 'images/user/'; ?>
                         @foreach($collections as $collection)
                         <tr>
+                            
 
                             <td>{{$collection->loan_number}}</td>
                             <td>{{$collection->cre_nic_number}}</td>
@@ -85,13 +86,11 @@
                             <td  style="font-weight:bold;color:red;font-size:15px">{{$collection->loan_with_int-$collection->payment_amount}}</td>
                          
 
-                            <!-- <td>
-                                <button id="viewbtn" onclick="abc({{$collection->id}});" type="button" class="  btn btn-default btn-sm " >
-                                    <i class="fa fa-file"></i> </button>
-                                     
-                                <a href="{{url('/admin/update_loan/'.$collection->id)}}" class="btn btn-info">   <i class="fa fa-edit"></i></a>
-                                <button onclick="deleteconfirm({{$collection->id}})" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
-                            </td> -->
+                            <td>
+                                
+                                <a href="{{url('/admin/outstanding_by_loan_id/'.$collection->loan_id)}}" class="btn btn-success">   View</a>
+                                <!-- <button onclick="deleteconfirm({{$collection->id}})" class="btn btn-danger"><i class="fa fa-trash-o"></i></button> -->
+                            </td>
 
                         </tr>
                         @endforeach

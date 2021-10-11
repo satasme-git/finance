@@ -21,6 +21,7 @@ class CreateLoansTable extends Migration
             $table->integer('loan_period');
             $table->double('loan_with_int');
             $table->double('loan_installement');
+            $table->double('loan_rate');
             $table->integer('loan_term');
             $table->string('loan_start_date');
             $table->tinyInteger('status');

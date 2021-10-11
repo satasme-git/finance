@@ -6,7 +6,7 @@
 
     <div class="page-header-content">
         <div class="page-title">
-            <h4><i class="icon-arrow-left52 position-left"></i> <span class="text-semibold">Report</span> -  Daily collection</h4>
+            <h4><i class="icon-arrow-left52 position-left"></i> <span class="text-semibold">Report</span> - View Outstanding By Loan</h4>
         </div>
 
         <div class="heading-elements">
@@ -21,8 +21,8 @@
     <div class="breadcrumb-line">
         <ul class="breadcrumb">
         <li><a href="/dashboard"><i class="icon-home2 position-left"></i> Home</a></li>
-							<li><a href="/admin/view_loan">Report</a></li>
-            <li class="active"> Daily collection</li>
+							<li><a href="/admin/">Report</a></li>
+            <li class="active">View outstanding by loan</li>
         </ul>
 
         <ul class="breadcrumb-elements">
@@ -50,59 +50,7 @@
 
 <!-- Content area -->
 <div class="content" style="margin-bottom:-40px">
-<div class="col-md-12" style="background-color: #e0e0e0;padding-top:5px">
 
-
-            
-<form action="/serch_by_collector_id" method="POST">
-  {{csrf_field()}}
-  <div class="col-md-4">
-      <div class="form-group {{ $errors->has('search') ? ' has-error' : '' }}">
-          <label for="email">Collector name:</label>
-          <input type="hidden" class="form-control" id="collector_id" name="collector_id" placeholder="Enter collector name">
-          <input type="text" class="form-control" id="search" name="search" placeholder="Enter collector name">
-      </div>
-      @if ($errors->has('search'))
-      <span class="help-block">
-          <strong style="color: #ff0000">{{ $errors->first('search') }}</strong>
-      </span>
-      @endif
-  </div>
-  <div  class="col-md-3">
-      <div class="form-group {{ $errors->has('start_date') ? ' has-error' : '' }}">
-          <label for="email">Start Date:</label>
-          <input type="date" class="form-control" placeholder="Enter email" name="start_date" id="start_date">
-      </div>
-      @if ($errors->has('start_date'))
-      <span class="help-block">
-          <strong style="color: #ff0000">{{ $errors->first('start_date') }}</strong>
-      </span>
-      @endif
-  </div>
-  <div  class="col-md-3">
-      <div class="form-group {{ $errors->has('end_date') ? ' has-error' : '' }}">
-          <label for="email">End Date:</label>
-          <input type="date" class="form-control" placeholder="Enter email" name="end_date" id="end_date">
-      </div>
-      @if ($errors->has('end_date'))
-      <span class="help-block">
-          <strong style="color: #ff0000">{{ $errors->first('end_date') }}</strong>
-      </span>
-      @endif
-  </div>
-
-  <div  class="col-md-2">
-      <div class="form-group " style="padding-top:25px">
-          <!-- <label for="email">.</label>  -->
-          <input type="submit" class="btn btn-success btn-sm" placeholder="Enter email"  value="Search">
-        
-
-      </div>
-
-  </div>
-  <input type="hidden" id="memberid" name="memberid"/>
-</form>
-</div>
 </div>
 <div class="content">
 
@@ -113,32 +61,32 @@
                 <table class="table table-striped  table-hover dataTables-example" >
                     <thead>
                         <tr>
-                            <th>Loan Number</th>
-                            <th>Amount</th>
-                            <th>Rental frequancy</th>                       
-                            <th>Loan Period</th>                       
-                        
-                            <th style="width:100px">Action</th>
+                            <th>Date</th>
+                            <th>Payment Amount</th>
+                            <th>Total payed</th>
+                            <th>Available to paid</th>
+                           
+                          
                         </tr>
                     </thead>
                     <tbody>
                         <?php $path = 'images/user/'; ?>
+                        <?php
+                        $total=0;
+                        ?>
                         @foreach($collections as $collection)
                         <tr>
+                         <?php
+                                $outstanding=$collection->loan_with_int;
+                                $total+=$collection->pay_amount;
+                            
+                            ?>
                             <td>{{$collection->installement_date}}</td>
-                            <td>{{$collection->loan_number}}</td>
                             <td>{{$collection->pay_amount}}</td>
-                            <td>{{$collection->cre_nic_number}}</td>
-                         
-
-                            <td>
-                                <button id="viewbtn" onclick="abc({{$collection->id}});" type="button" class="  btn btn-default btn-sm " >
-                                    <i class="fa fa-file"></i> </button>
-                                     
-                                <a href="{{url('/admin/update_loan/'.$collection->id)}}" class="btn btn-info">   <i class="fa fa-edit"></i></a>
-                                <button onclick="deleteconfirm({{$collection->id}})" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
-                            </td>
-
+                            <td style="font-weight:bold;font-size:15px"><?= $total?></td>
+                            <td style="font-weight:bold;font-size:15px;color:red"><?=$outstanding- $total?></td>
+     
+                        
                         </tr>
                         @endforeach
                     </tbody>

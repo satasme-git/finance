@@ -21,7 +21,7 @@ class ReportController extends Controller
                         ->join( 'creditors', 'daily_collections.cre_id', '=', 'creditors.id' )
                         ->join( 'users', 'daily_collections.user_id', '=', 'users.id' )
                         ->join( 'loans', 'daily_collections.loan_id', '=', 'loans.id' )
-                        ->select(DB::raw("SUM(daily_collections.pay_amount) as payment_amount"),'daily_collections.id','daily_collections.loan_number', 'daily_collections.pay_amount', 'daily_collections.installement_date', 'daily_collections.status', 'daily_collections.cre_id', 'daily_collections.loan_id', 'creditors.cre_first_Name', 'creditors.cre_last_Name', 'creditors.cre_nic_number','users.user_first_Name','users.user_last_Name','loans.loan_amount','loans.loan_with_int','creditors.cre_nic_number','creditors.cre_first_Name','creditors.cre_last_Name')
+                        ->select(DB::raw("SUM(daily_collections.pay_amount) as payment_amount"),'daily_collections.id','daily_collections.loan_number', 'daily_collections.pay_amount', 'daily_collections.installement_date', 'daily_collections.status', 'daily_collections.cre_id', 'daily_collections.loan_id', 'creditors.cre_first_Name', 'creditors.cre_last_Name', 'creditors.cre_nic_number','users.user_first_Name','users.user_last_Name','loans.loan_amount','loans.loan_with_int','creditors.cre_nic_number','creditors.cre_first_Name','creditors.cre_last_Name','daily_collections.loan_id')
                         ->where( [
                             ['daily_collections.status', '=', 1],
                             // ['users.id', '=', $collector_id],
@@ -32,4 +32,22 @@ class ReportController extends Controller
                         return view('Web.Report.LoanOutstandingReport',$data );
 
     }
+    public function outstanding_by_loan_id(Request $request) {
+
+        $data['collections'] = DB::table( 'daily_collections' )
+        ->join( 'creditors', 'daily_collections.cre_id', '=', 'creditors.id' )
+        ->join( 'users', 'daily_collections.user_id', '=', 'users.id' )
+        ->join( 'loans', 'daily_collections.loan_id', '=', 'loans.id' )
+        ->select('daily_collections.*','creditors.cre_first_Name', 'creditors.cre_last_Name', 'creditors.cre_nic_number','users.user_first_Name','users.user_last_Name','loans.loan_amount','loans.loan_with_int','creditors.cre_nic_number','creditors.cre_first_Name','creditors.cre_last_Name')
+        ->where( [
+            ['daily_collections.loan_id', '=', $request->id],
+            ['daily_collections.status', '=', 1],
+        ] )
+        ->get();
+
+        return view('Web.Report.ViewOutstandingByLoanId',$data );
+
+}
+
+    
 }

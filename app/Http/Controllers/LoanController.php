@@ -58,6 +58,7 @@ class LoanController extends Controller
         $creditor_nic = $request->get( 'creditor_nic' );
         $loan_amount = $request->get( 'loan_amount' );
         $loan_rental = $request->get( 'loan_rental' );
+        $loan_rate = $request->get( 'loan_rate' );
         $loan_period = $request->get( 'loan_period' );
         $loan_with_interest = $request->get( 'loan_with_interest' );
         $loan_installement = $request->get( 'loan_installement' );
@@ -65,15 +66,17 @@ class LoanController extends Controller
         $loan_start_date = $request->get( 'loan_start_date' );
         $cre_id = $request->get( 'cre_id');
 
+        echo "///// : ". $loan_rate;
 
-        $validationdata = array( 'creditor_nic'=>$creditor_nic,'loan_amount' => $loan_amount, 'loan_period' => $loan_period, 'loan_installement' => $loan_installement, 'loan_term' => $loan_term, 'loan_start_date' => $loan_start_date, 'loan_rental' => $loan_rental );
-        $validationtype = array( 'creditor_nic' => 'required','loan_amount' => 'required', 'loan_period' => 'required', 'loan_installement' => 'required', 'loan_term' => 'required', 'loan_start_date' => 'required|not_in:0|date|date_format:Y-m-d|after:yesterday', 'loan_rental' => 'required');
+        $validationdata = array( 'creditor_nic'=>$creditor_nic,'loan_amount' => $loan_amount, 'loan_period' => $loan_period, 'loan_rate' => $loan_rate, 'loan_installement' => $loan_installement, 'loan_term' => $loan_term, 'loan_start_date' => $loan_start_date, 'loan_rental' => $loan_rental );
+        $validationtype = array( 'creditor_nic' => 'required','loan_amount' => 'required', 'loan_period' => 'required', 'loan_installement' => 'required', 'loan_rate' => 'required', 'loan_term' => 'required', 'loan_start_date' => 'required|not_in:0|date|date_format:Y-m-d|after:yesterday', 'loan_rental' => 'required');
 
         $validator = Validator::make( $validationdata, $validationtype );
 
         if ( $validator->fails() ) {
             return redirect()->back()->withErrors( $validator )->withInput();
-        }else{
+        }
+        else{
             $number = sprintf("%05d", $loan_term);
             $loan_number= $cre_id."".$number+1;
             $data = [
@@ -81,6 +84,7 @@ class LoanController extends Controller
                 'loan_amount' => $loan_amount,
                 'loan_rental_freq' => $loan_rental,
                 'loan_period' => $loan_period,
+                'loan_rate' => $loan_rate,
                 'loan_with_int' => $loan_with_interest,
                 'loan_installement' => $loan_installement,
                 'loan_term' => $loan_term,
@@ -144,6 +148,7 @@ class LoanController extends Controller
         $loan_amount = $request->get( 'loan_amount' );
         $loan_rental = $request->get( 'loan_rental' );
         $loan_period = $request->get( 'loan_period' );
+        $loan_rate = $request->get( 'loan_rate' );
         $loan_with_interest = $request->get( 'loan_with_interest' );
         $loan_installement = $request->get( 'loan_installement' );
         $loan_term = $request->get( 'loan_term' );
@@ -151,8 +156,8 @@ class LoanController extends Controller
         $cre_id = $request->get( 'cre_id');
 
 
-        $validationdata = array( 'creditor_nic'=>$creditor_nic,'loan_amount' => $loan_amount, 'loan_period' => $loan_period, 'loan_installement' => $loan_installement, 'loan_term' => $loan_term, 'loan_start_date' => $loan_start_date, 'loan_rental' => $loan_rental );
-        $validationtype = array( 'creditor_nic' => 'required','loan_amount' => 'required', 'loan_period' => 'required', 'loan_installement' => 'required', 'loan_term' => 'required', 'loan_start_date' => 'required|not_in:0|date|date_format:Y-m-d|after:yesterday', 'loan_rental' => 'required');
+        $validationdata = array( 'creditor_nic'=>$creditor_nic,'loan_amount' => $loan_amount, 'loan_rate' => $loan_rate, 'loan_period' => $loan_period, 'loan_installement' => $loan_installement, 'loan_term' => $loan_term, 'loan_start_date' => $loan_start_date, 'loan_rental' => $loan_rental );
+        $validationtype = array( 'creditor_nic' => 'required','loan_amount' => 'required', 'loan_period' => 'required', 'loan_installement' => 'required', 'loan_rate' => 'required', 'loan_term' => 'required', 'loan_start_date' => 'required|not_in:0|date|date_format:Y-m-d|after:yesterday', 'loan_rental' => 'required');
 
         $validator = Validator::make( $validationdata, $validationtype );
 
@@ -166,6 +171,7 @@ class LoanController extends Controller
                 'loan_amount' => $loan_amount,
                 'loan_rental_freq' => $loan_rental,
                 'loan_period' => $loan_period,
+                'loan_rate' => $loan_rate,
                 'loan_with_int' => $loan_with_interest,
                 'loan_installement' => $loan_installement,
                 'loan_term' => $loan_term,

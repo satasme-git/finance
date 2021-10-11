@@ -168,21 +168,40 @@
                                 </span>
                                 @endif
                             </div>	
-                            <div class="form-group {{ $errors->has('loan_rental') ? ' has-error' : '' }}">
-                                <label>Rental Frequance:</label>
-                                <select data-placeholder="Select Rental" class="form-control select"  id="loan_rental" name="loan_rental" onchange ="loanCalculations();">
-                                    <option></option>
+                            <div class="form-group ">
+                               
+                                    <div class="row ">
+                                    <div class="col-md-8 {{ $errors->has('loan_rental') ? ' has-error' : '' }}">
+                                    <label>Rental Frequance:</label>
+                                    <select data-placeholder="Select Rental" class="form-control select"  id="loan_rental" name="loan_rental" onchange ="loanCalculations();">
+                                        <option></option>
 
-                                    <option  value="Monthly">Monthly</option>
-                                    <option  value="Weekly">Weekly</option>
-                                    <option  value="Daily">Daily</option>
+                                        <option  value="Monthly">Monthly</option>
+                                        <option  value="Weekly">Weekly</option>
+                                        <option  value="Daily">Daily</option>
 
-                                </select>
-                                @if ($errors->has('loan_rental'))
-                                <span class="help-block">
-                                    <strong style="color: #ff0000">{{ $errors->first('loan_rental') }}</strong>
-                                </span>
-                                @endif
+                                    </select>
+                                    @if ($errors->has('loan_rental'))
+                                    <span class="help-block">
+                                        <strong style="color: #ff0000">{{ $errors->first('loan_rental') }}</strong>
+                                    </span>
+                                    @endif
+                                    </div>
+                                    <div class="col-md-4 {{ $errors->has('loan_rate') ? ' has-error' : '' }}">
+                                    <label>Rate:</label>
+                                        <input type="text" class="form-control"  placeholder="Rate" id="loan_rate" value="10" name="loan_rate" onkeyup ="loanCalculations();"	@if($errors->any())
+                                            value="{{old('loan_rate')}}""
+                                            @elseif(!empty($records->loan_rate))
+                                            value="{{$records->loan_rate}}"
+                                            @endif />
+                                            @if ($errors->has('loan_rate'))
+                                            <span class="help-block">
+                                            <strong style="color: #ff0000">{{ $errors->first('loan_rate') }}</strong>
+                                            </span>
+                                            @endif
+                                    </div>
+                                </div>   
+                         
                             </div>
                             <div class="form-group {{ $errors->has('loan_period') ? ' has-error' : '' }}">
                                 <label>Periods:</label>
@@ -306,25 +325,38 @@
 
     });
 	function loanPerioud(){
+        
 		var aplication_lamountWithInt = document.getElementById('loan_with_interest').value;
                 var aplication_lperiod = document.getElementById('loan_period').value;
 
                 var weeklyDue = aplication_lamountWithInt / aplication_lperiod;
                 document.getElementById('loan_installement').value = parseFloat(weeklyDue);
+
+              
+                
 		}
 		function loanCalculations() {
+
+            var loan_rate = document.getElementById('loan_rate').value;
+              var rate=0;
+
+                if(loan_rate!=""){
+                    rate=loan_rate;
+                }else{
+                    rate=10; 
+                }
                 var loan_amount = document.getElementById('loan_amount').value;
                 var loan_perioud = document.getElementById('loan_period').value;
-				var aplication_irate =10;
+				// var aplication_irate =10;
                 var aplication_months = document.getElementById('loan_rental').value;
 
                 if(aplication_months=="Daily"){
                     
-                    var loantWithInterest = (loan_amount * aplication_irate*(loan_perioud/30) ) / 100;
+                    var loantWithInterest = (loan_amount * rate*(loan_perioud/30) ) / 100;
                 }else if(aplication_months=="Weekly"){
-                    var loantWithInterest = (loan_amount * aplication_irate*(loan_perioud/4) ) / 100;
+                    var loantWithInterest = (loan_amount * rate*(loan_perioud/30) ) / 100;
                 }else if(aplication_months=="Monthly"){
-                    var loantWithInterest = (loan_amount * aplication_irate*(loan_perioud/1) ) / 100;
+                    var loantWithInterest = (loan_amount * rate*(loan_perioud/30) ) / 100;
                 }else{
                     var loantWithInterest =0;
                 }

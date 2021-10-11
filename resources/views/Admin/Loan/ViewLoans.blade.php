@@ -62,6 +62,7 @@
                             <th>Loan Period</th>                       
                             <th>Loan With Interest</th>   
                             <th>Crediter NIC</th>   
+                            <th>Rate</th>   
                             <th>Status</th>
                             <th style="width:100px">Action</th>
                         </tr>
@@ -77,6 +78,7 @@
                             <td>{{$loan->loan_period}}</td>
                             <td>{{$loan->loan_with_int}}</td>
                             <td>{{$loan->cre_nic_number}}</td>
+                            <td>{{$loan->loan_rate}}</td>
                             @if($loan->status==1)
                             <td><span class="label bg-success">Pending</span></td>
                             @elseif($loan->status==2)
@@ -189,6 +191,10 @@
                             <label for="email" style="font-weight:bold">Installemet amount:</label>
                             <input type="text" style="border:none;margin:-10px" class="form-control" id="loan_inst">
                         </div>
+                        <div class="form-group">
+                            <label for="email" style="font-weight:bold">Loan Rate:</label>
+                            <input type="text" style="border:none;margin:-10px" class="form-control" id="loan_rate">
+                        </div>
                       
                     </div>
                 </div>
@@ -253,6 +259,8 @@
             $("#loan_period").val(data[0].loan_period);
             $("#loan_with_int").val(data[0].loan_with_int);
             $("#loan_inst").val(data[0].loan_installement);
+            $("#loan_rate").val(data[0].loan_rate);
+            
 
             if (data[0].status == 1){
                 document.getElementById("loan_status").innerHTML="Pending loan";
