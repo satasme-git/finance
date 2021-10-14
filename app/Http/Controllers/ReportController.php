@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Loan;
 use App\Models\Creditor;
+use App\Models\DailyColection;
+
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Validator;
@@ -48,6 +51,96 @@ class ReportController extends Controller
         return view('Web.Report.ViewOutstandingByLoanId',$data );
 
 }
+public function monthlyCollection() {
+
+    $orders = Loan::select(
+        DB::raw('sum(loan_with_int) as sums'), 
+        DB::raw("DATE_FORMAT(created_at,'%M %Y') as months")
+        )
+        ->groupBy('months')
+        ->get();
+
+        $dailyCollections = DailyColection::select(
+            DB::raw('sum(pay_amount) as pay_amount'), 
+            DB::raw("DATE_FORMAT(created_at,'%M %Y') as monthsd")
+            )
+            ->groupBy('monthsd')
+            ->get();
+
+    // $date_year = date('Y-m', strtotime(\Carbon\Carbon::now()->toDateTimeString()));
+
+    $data = [];
+
+    foreach ($orders as $key => $value) {
+        foreach ($dailyCollections as $key => $valued) {
+            if($value->months==$valued->monthsd){
+                $data[] = ['id' => $value->id, 'value' => $value->loan_number, 'sums' => $value->sums, 'months' => $value->months, 'pay_amount' => $valued->pay_amount,
+                        // 'blockNo'=>$value->blockNo,
+                ];
+            }
+        }
+    }
+   
+    return response($data);
+
+
+    // echo $orders;
+
+}
+    public function issuedLoanDaily() {
+        $ldate = date('Y-m-d');
+        $dailyCollections = Loan::select(
+            DB::raw('sum(loan_amount) as loanamount'), 
+            )
+            ->where( [
+                ['created_at', '=', $ldate],
+            ] )
+            ->get();
+
+        $data = [];
+        foreach ($dailyCollections as $key => $value) {
+                $data[] = [ 'loanamount' => $value->loanamount];
+        }
+        
+        return response($data);
+    }
+   
+    public function todayDailyCollection() {
+        $ldate = date('Y-m-d');
+          $Collections = DailyColection::select(
+                DB::raw('sum(pay_amount) as pay_amount'), 
+                )
+                ->where( [
+                    ['installement_date', '=', $ldate],
+                ] )
+                ->get();
+  
+            
+        $data = [];
+        foreach ($Collections as $key => $value) {
+                $data[] = [ 'pay_amount' => $value->pay_amount];
+        }
+        
+        return response($data);
+    }
+    public function todayActiveCreditors() {
+        $ldate = date('Y-m-d');
+          $creditor = Creditor::select(
+                DB::raw('count(id) as tota_Creditors'), 
+                )
+                ->where( [
+                    ['status', '=', 1],
+                ] )
+                ->get();
+  
+            
+        $data = [];
+        foreach ($creditor as $key => $value) {
+                $data[] = [ 'tota_Creditors' => $value->tota_Creditors];
+        }
+        
+        return response($data);
+    }
 
     
 }

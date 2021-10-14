@@ -223,6 +223,10 @@
                                     <strong style="color: #ff0000">{{ $errors->first('pay_amount') }}</strong>
                                 </span>
                                 @endif
+
+                               @if(Session::has('msg1'))
+                                {!! Session::get('msg1') !!} 
+                                @endif
                             </div>
                           
 

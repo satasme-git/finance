@@ -113,35 +113,47 @@
                 <table class="table table-striped  table-hover dataTables-example" >
                     <thead>
                         <tr>
+                        <th>Installment Date</th>
                             <th>Loan Number</th>
-                            <th>Amount</th>
-                            <th>Rental frequancy</th>                       
-                            <th>Loan Period</th>                       
-                        
-                            <th style="width:100px">Action</th>
+                            <th>Creditor NIC number</th>                       
+                            <th>Pay Amount</th>   
+                            <!-- <th style="width:100px">Action</th> -->
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $path = 'images/user/'; ?>
+                        <?php
+                         $path = 'images/user/'; 
+                         $total=0;
+                         ?>
                         @foreach($collections as $collection)
+                        <?php
+                         $total+=$collection->pay_amount;
+                        ?>
                         <tr>
                             <td>{{$collection->installement_date}}</td>
                             <td>{{$collection->loan_number}}</td>
-                            <td>{{$collection->pay_amount}}</td>
                             <td>{{$collection->cre_nic_number}}</td>
+                            <td>{{$collection->pay_amount}}</td>
                          
 
-                            <td>
+                            <!-- <td>
                                 <button id="viewbtn" onclick="abc({{$collection->id}});" type="button" class="  btn btn-default btn-sm " >
                                     <i class="fa fa-file"></i> </button>
                                      
                                 <a href="{{url('/admin/update_loan/'.$collection->id)}}" class="btn btn-info">   <i class="fa fa-edit"></i></a>
                                 <button onclick="deleteconfirm({{$collection->id}})" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
-                            </td>
+                            </td> -->
 
                         </tr>
                         @endforeach
                     </tbody>
+                    <tfoot>
+                            <tr>
+                            <td colspan="2"></td>
+                            <td style=" text-align: right;">Total:</td>
+                            <td style="font-weight:bold">{{ $total}}</td>
+                            </tr>
+                        </tfoot>
 
                 </table>
             </div>

@@ -57,8 +57,8 @@ class CollectorController extends Controller
         $cre_id = $request->get( 'cre_id' );
         $loan_id = $request->get( 'loan_id' );
         $pay_amount = $request->get( 'pay_amount' );
-       
-
+        $outstanding = $request->get( 'outstanding' );
+        
 
         $validationdata = array( 'loan_number'=>$loan_number,'pay_amount' => $pay_amount);
         $validationtype = array( 'loan_number' => 'required','pay_amount' => 'required', );
@@ -68,24 +68,30 @@ class CollectorController extends Controller
         if ( $validator->fails() ) {
             return redirect()->back()->withErrors( $validator )->withInput();
         }else{
-            $data = [
-                'loan_number' => $loan_number,
-                'pay_amount' => $pay_amount,
-                'installement_date' =>  \Carbon\Carbon::parse(\Carbon\Carbon::now()->toDateTimeString())->format('Y-m-d'),
-                'cre_id' => $cre_id,
-                'loan_id' => $loan_id,
-                'user_id' => Session::get('user_info.id'),
-                'created_at'=>\Carbon\Carbon::now()->toDateTimeString(),
-                'updated_at'=>\Carbon\Carbon::now()->toDateTimeString(),
-                'status' => 1,
-               
-            ];
-
-
-            $id = DB::table( 'daily_collections' )->insertGetId( $data );
-            $request->session()->flash( 'msg', 'insert' );
-
-            return redirect( '/web/daily_collection' );
+            if($outstanding>=$pay_amount){
+                $data = [
+                    'loan_number' => $loan_number,
+                    'pay_amount' => $pay_amount,
+                    'installement_date' =>  \Carbon\Carbon::parse(\Carbon\Carbon::now()->toDateTimeString())->format('Y-m-d'),
+                    'cre_id' => $cre_id,
+                    'loan_id' => $loan_id,
+                    'user_id' => Session::get('user_info.id'),
+                    'created_at'=>\Carbon\Carbon::parse(\Carbon\Carbon::now()->toDateTimeString())->format('Y-m-d'),
+                    'updated_at'=>\Carbon\Carbon::now()->toDateTimeString(),
+                    'status' => 1,
+                   
+                ];
+    
+    
+                $id = DB::table( 'daily_collections' )->insertGetId( $data );
+                $request->session()->flash( 'msg', 'insert' );
+    
+                return redirect( '/web/daily_collection' );
+            }else{
+                $request->session()->flash('msg1', '<span class="help-block"><strong style="color: #ff0000">Pay amount must be lower or equal than oustanding amount</strong></span>');
+                return redirect()->back();
+            }
+         
         }
     }
 
@@ -140,6 +146,7 @@ class CollectorController extends Controller
                 ->select('loans.*', 'creditors.cre_first_Name' , 'creditors.cre_last_Name', 'creditors.cre_nic_number', 'creditors.cre_phone_number', 'creditors.cre_address', 'creditors.id AS cre_id')
                 ->where([
                     ['loan_number', 'LIKE', '%' . $search . '%'],
+                    ['creditors.user_id', '=', Session::get('user_info.id')],
                     ['loans.status', '=', 1],
                     ])
                 ->get();
@@ -172,12 +179,14 @@ class CollectorController extends Controller
     }
        public function view_daily_collections(Request $request)
     {
+        $ldate = date('Y-m-d');
+
         $data['collections'] = DB::table( 'daily_collections' )
         ->join( 'creditors', 'daily_collections.cre_id', '=', 'creditors.id' )
         ->select( 'daily_collections.*', 'creditors.cre_first_Name', 'creditors.cre_last_Name', 'creditors.cre_nic_number' )
         ->where( [
             ['daily_collections.status', '=', 1],
-
+            ['daily_collections.installement_date', '=', $ldate],
         ] )
         ->orderBy('id', 'DESC')
         ->get();
@@ -206,6 +215,7 @@ class CollectorController extends Controller
     }
         public function serch_by_collector_id(Request $request) {
 
+            $ldate = date('Y-m-d');
             $collector_name = $request->search;
             $collector_id = $request->collector_id;
             
@@ -229,6 +239,7 @@ class CollectorController extends Controller
                             ->select( 'daily_collections.*', 'creditors.cre_first_Name', 'creditors.cre_last_Name', 'creditors.cre_nic_number','users.user_first_Name','users.user_last_Name' )
                             ->where( [
                                 ['daily_collections.status', '=', 1],
+                                ['daily_collections.installement_date', '=', $ldate],
                                 ['users.id', '=', $collector_id],
                             ] )
                             ->orderBy('id', 'DESC')
@@ -336,5 +347,25 @@ class CollectorController extends Controller
         return view( 'Web.Collector.DailyCollectionByLoanNumber',$data,compact( 'collections'));
 
     }
+
+    public function daily_collection_by_cre_id(Request $request)
+    {
+
+
+       $data['loans'] = DB::table( 'loans' )
+       ->join( 'creditors', 'loans.cre_id', '=', 'creditors.id' )
+       ->select( 'loans.*', 'creditors.cre_first_Name', 'creditors.cre_last_Name', 'creditors.cre_nic_number')
+       ->where( [
+           ['loans.status', '=', 1],
+           ['creditors.id', '=', $request->id],
+       ] )
+       ->orderBy('id', 'DESC')
+       ->get();
+    
+        return view('Web.Collector.ViewCreditorByNIC',$data );
+
+
+    } 
+    
     
 }

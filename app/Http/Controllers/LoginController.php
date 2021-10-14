@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\User;
+use App\Mail\SendMail;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use Validator;
 use Session;
@@ -68,4 +70,75 @@ class LoginController extends Controller {
         ->get()->first();
 		return view('Admin.User.UpdateProfile', compact(  'users' ) );
 	}
+    public function fogotPassword()
+    {
+ 
+        return view( 'FogotPassword' );
+    }
+    public function resetPassword()
+    {
+ 
+        return view( 'ResetPassword' );
+    }
+
+    public function sendEmail(Request $request)
+    {
+        $email = $request->email;
+        $validationdata = array( 'email' => $email);
+        $validationtype = array( 'email' => 'required' );
+
+        $validator = Validator::make( $validationdata, $validationtype );
+
+        if ( $validator->fails() ) {
+            return redirect()->back()->withErrors( $validator )->withInput();
+        }else{
+
+            $user = User::where( 'user_email', '=', $request->email )->first();
+            if ( !empty( $user ) ) {
+
+                $details=[
+                    'title'=>'Mail form finance',
+                    'body'=>'This is a testing email'
+                ];
+                Session::put('reset_email', $request->email);
+                Mail::to($request->email)->send(new SendMail($details));
+              return redirect( '/email_confirm' );;
+
+                
+            } else {
+                $request->session()->flash('msg', '<div id="alert-msg" class="alert alert-danger">Email is incorrect <a class="close" data-dismiss="alert">×</a> </div>');
+                return redirect( '/fogot_password' );
+            }
+        }
+    }
+    public function passwordReset(Request $request){
+
+        $email_address = $request->email_address;
+        $new_password = $request->new_password;
+        $confirm_password = $request->confirm_password;
+        $validationdata = array( 'email_address' => $email_address,'new_password' => $new_password,'confirm_password' => $confirm_password);
+        $validationtype = array( 'email_address' => 'required','new_password' => 'required','confirm_password' => 'required' );
+
+        $validator = Validator::make( $validationdata, $validationtype );
+
+        if ( $validator->fails() ) {
+            return redirect()->back()->withErrors( $validator )->withInput();
+        }else{
+            if($new_password==$confirm_password){
+                $data = [
+                    'user_password' => Hash::make($new_password ),
+                    'updated_at'=>\Carbon\Carbon::now()->toDateTimeString(),
+                ];
+                DB::table( 'users' )->where( 'user_email', $email_address )->update( $data );
+                return view('login');
+            }else{
+                $request->session()->flash('msg1', '<span class="help-block"><strong style="color: #ff0000">Password does not match</strong></span>');
+                return redirect( '/reset_password' );
+            }
+        }
+       
+    }
+    
+
+    
 }

@@ -30,7 +30,7 @@
     @if(Session::has('msg'))
     {!! Session::get('msg') !!} 
     @endif
-    <form action="/admin/edit_user/{{$users->id}}" enctype="multipart/form-data" method="POST">
+    <form action="/admin/updateProfile/{{$users->id}}" enctype="multipart/form-data" method="POST">
         {{csrf_field()}}
         <div class="panel panel-flat">
             <div class="panel-body">
@@ -162,19 +162,7 @@
                                 </span>
                                 @endif
                             </div>
-                            <div class="form-group {{ $errors->has('user_password') ? ' has-error' : '' }}">
-                                <label>Password:</label>
-                                <input type="text" class="form-control" placeholder="Enter Phone Number" value="{{$users->user_password}}" id="user_password" name="user_password"	@if($errors->any())
-                                       value="{{old('user_password')}}""
-                                       @elseif(!empty($users->user_password))
-                                       value="{{$users->user_password}}"
-                                       @endif />
-                                       @if ($errors->has('user_password'))
-                                       <span class="help-block">
-                                    <strong style="color: #ff0000">{{ $errors->first('user_password') }}</strong>
-                                </span>
-                                @endif
-                            </div>
+                            
                             <div class="form-group {{ $errors->has('user_address') ? ' has-error' : '' }}">
                                 <label>Address:</label>
                                 <textarea rows="5" cols="5" class="form-control" placeholder="Enter address here"  id="address" name="user_address">@if($errors->any()){{old('user_address')}}@elseif(!empty($records->user_address)){{$records->user_address}}@endif {{$users->user_address}}</textarea>

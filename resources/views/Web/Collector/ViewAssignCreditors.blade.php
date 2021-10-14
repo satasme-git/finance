@@ -60,8 +60,8 @@
                             <th>Name</th>              
                             <th>NIC Number</th>  
                             <th>Date Of Birth</th>
-                            <th>Gender</th>                     
-                            <th>Phone Number</th> 
+                            <!-- <th>Gender</th>                     
+                            <th>Phone Number</th>  -->
                             <th>Collector name</th>    
                             <th>Action</th>
                         </tr>
@@ -73,16 +73,16 @@
 
                             <td>{{$creditor->cre_first_Name}} {{$creditor->cre_last_Name}}</td>
                             <td>{{$creditor->cre_nic_number}}</td>
-                            <td>{{$creditor->cre_DOB}}</td>
-                            <td>{{$creditor->cre_gender}}</td>
+                            <!-- <td>{{$creditor->cre_DOB}}</td>
+                            <td>{{$creditor->cre_gender}}</td> -->
                             <td>{{$creditor->cre_phone_number}}</td>
                             <td>{{$creditor->user_first_Name}} {{$creditor->user_last_Name  }}</td>
                             <td  >
-                                <button id="viewbtn" onclick="abc({{$creditor->id}});" type="button" class="  btn btn-success btn-sm " >
-                                    <i class="fa fa-file"></i> </button>
+                                <!-- <button id="viewbtn" onclick="abc({{$creditor->id}});" type="button" class="  btn btn-success btn-sm " >
+                                    <i class="fa fa-file"></i> </button> -->
 
-                                <!-- <a href="{{url('/admin/update_creditor/'.$creditor->id)}}" class="btn btn-info">   <i class="fa fa-edit"></i></a>
-                                <button onclick="deleteconfirm({{$creditor->id}})" class="btn btn-danger"><i class="fa fa-trash-o"></i></button> -->
+                                <a href="{{url('/web/daily_collection_by_cre_id/'.$creditor->id)}}" class="btn btn-info">   <i class="fa fa-edit"></i></a>
+                                <!-- <button onclick="deleteconfirm({{$creditor->id}})" class="btn btn-danger"><i class="fa fa-trash-o"></i></button> -->
                             </td>
 
                         </tr>

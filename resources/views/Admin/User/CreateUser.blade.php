@@ -168,6 +168,10 @@
 														<strong style="color: #ff0000">{{ $errors->first('user_email') }}</strong>
 													</span>
 													@endif
+
+                                    @if(Session::has('msg1'))
+                            {!! Session::get('msg1') !!} 
+             @endif
 											</div>	
 											<div class="form-group {{ $errors->has('user_address') ? ' has-error' : '' }}">
 													<label>Phone Number:</label>

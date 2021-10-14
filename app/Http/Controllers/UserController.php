@@ -78,43 +78,52 @@ class UserController extends Controller {
             return redirect()->back()->withErrors( $validator )->withInput();
         } else {
 
-            $data = [
-                'user_emp_number' => $user_emp_number,
-                'user_first_Name' => $user_first_Name,
-                'user_last_Name' => $user_last_Name,
-                'user_email' => $user_email,
-                'user_nic_number' => $user_nic_number,
-                'user_DOB' => $user_DOB,
-                'user_phone_number' => $user_phone_number,
-                'user_username' => $user_username,
-                'user_password' => Hash::make( 123 ),
-                'user_address' => $user_address,
-                'role_id' => $role_id,
-                'created_at'=>\Carbon\Carbon::now()->toDateTimeString(),
-                'updated_at'=>\Carbon\Carbon::now()->toDateTimeString(),
-                'status' => 1,
-            ];
-            $time = time();
-            if ( $request->hasFile( 'user_image' ) ) {
+            $user = User::where( 'user_email', '=', $user_email )->first();
+            if (empty( $user ) ) {
 
-                $image = $request->file( 'user_image' );
-                $imagename = $time . 'cfimg.' . $image->getClientOriginalExtension();
-                $destinationPath = public_path( '/images/user/' );
-
-                if ( !File::isDirectory( $destinationPath ) ) {
-                    File::makeDirectory( $destinationPath, 0777, true, true );
+                $data = [
+                    'user_emp_number' => $user_emp_number,
+                    'user_first_Name' => $user_first_Name,
+                    'user_last_Name' => $user_last_Name,
+                    'user_email' => $user_email,
+                    'user_nic_number' => $user_nic_number,
+                    'user_DOB' => $user_DOB,
+                    'user_phone_number' => $user_phone_number,
+                    'user_username' => $user_username,
+                    'user_password' => Hash::make( 123 ),
+                    'user_address' => $user_address,
+                    'role_id' => $role_id,
+                    'created_at'=>\Carbon\Carbon::now()->toDateTimeString(),
+                    'updated_at'=>\Carbon\Carbon::now()->toDateTimeString(),
+                    'status' => 1,
+                ];
+                $time = time();
+                if ( $request->hasFile( 'user_image' ) ) {
+    
+                    $image = $request->file( 'user_image' );
+                    $imagename = $time . 'cfimg.' . $image->getClientOriginalExtension();
+                    $destinationPath = public_path( '/images/user/' );
+    
+                    if ( !File::isDirectory( $destinationPath ) ) {
+                        File::makeDirectory( $destinationPath, 0777, true, true );
+                    }
+    
+                    $filename = $image->getClientOriginalName();
+                    $image_resize = \Image::make( $image->getRealPath() )->save( $destinationPath . $imagename );
+                    $data['user_image'] = $imagename;
+    
                 }
+    
+                $id = DB::table( 'users' )->insertGetId( $data );
+                $request->session()->flash( 'msg', 'insert' );
+    
+                return redirect( '/admin/adduser' );
 
-                $filename = $image->getClientOriginalName();
-                $image_resize = \Image::make( $image->getRealPath() )->save( $destinationPath . $imagename );
-                $data['user_image'] = $imagename;
-
+            }else {
+                $request->session()->flash('msg1', '<span class="help-block"><strong style="color: #ff0000">Email allready excist</strong></span>');
+                return redirect( '/admin/adduser' );
             }
-
-            $id = DB::table( 'users' )->insertGetId( $data );
-            $request->session()->flash( 'msg', 'insert' );
-
-            return redirect( '/admin/adduser' );
+           
         }
     }
 
@@ -268,6 +277,69 @@ class UserController extends Controller {
 
         return json_encode($msg);
 
+    }
+
+
+    public function updateProfile( Request $request, $id ) {
+
+        $user_first_Name = $request->get( 'fname' );
+        $user_last_Name = $request->get( 'lname' );
+        $user_email = $request->get( 'email' );
+        $user_nic_number = $request->get( 'nic' );
+        $user_DOB = $request->get( 'dob' );
+        $user_phone_number = $request->get( 'mobile' );
+        $user_username = $request->get( 'uname' );
+
+        $user_address = $request->get( 'user_address' );
+
+        // $id = $request->get( 'id' );
+
+
+        $validationdata = array('user_first_Name' => $user_first_Name, 'user_last_Name' => $user_last_Name, 'user_email' => $user_email, 'user_nic_number' => $user_nic_number, 'user_DOB' => $user_DOB, 'user_phone_number' => $user_phone_number, 'user_username' => $user_username, 'user_address' => $user_address );
+        $validationtype = array( 'user_first_Name' => 'required', 'user_last_Name' => 'required', 'user_email' => 'required|email', 'user_nic_number' => 'required|max:12', 'user_DOB' => 'required|not_in:0|date|date_format:Y-m-d|before:yesterday', 'user_phone_number' => 'required|digits:10', 'user_username' => 'required', 'user_address' => 'required');
+
+        $validator = Validator::make( $validationdata, $validationtype );
+
+        if ( $validator->fails() ) {
+            return redirect()->back()->withErrors( $validator )->withInput();
+        } else {
+
+            $data = [
+                'user_first_Name' => $user_first_Name,
+                'user_last_Name' => $user_last_Name,
+                'user_email' => $user_email,
+                'user_nic_number' => $user_nic_number,
+                'user_DOB' => $user_DOB,
+                'user_phone_number' => $user_phone_number,
+                'user_username' => $user_username,
+                'user_address' => $user_address,
+                'updated_at'=>\Carbon\Carbon::now()->toDateTimeString(),
+
+            ];
+            $time = time();
+            if ( $request->hasFile( 'user_image' ) ) {
+
+                $image = $request->file( 'user_image' );
+                $imagename = $time . 'cfimg.' . $image->getClientOriginalExtension();
+                $destinationPath = public_path( '/images/user/' );
+
+                if ( !File::isDirectory( $destinationPath ) ) {
+                    File::makeDirectory( $destinationPath, 0777, true, true );
+                }
+
+                $filename = $image->getClientOriginalName();
+                $image_resize = \Image::make( $image->getRealPath() )->save( $destinationPath . $imagename );
+                $data['user_image'] = $imagename;
+
+            }else{
+                $data['user_image']=$request->get( 'user_image1' );
+            }
+
+            DB::table( 'users' )->where( 'id', $id )->update( $data );
+            $request->session()->flash( 'msg', 'update' );
+
+            return redirect()->back();
+        }
     }
     
 

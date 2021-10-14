@@ -25,6 +25,13 @@ Route::get('/dashboard', function () {
 Route::post('/login_validate', 'App\Http\Controllers\LoginController@loginValidate');
 Route::get('/logout', 'App\Http\Controllers\LoginController@userlogout');
 Route::get('/admin/update_profile/{id}', 'App\Http\Controllers\LoginController@profile');
+Route::get('/fogot_password', 'App\Http\Controllers\LoginController@fogotPassword');
+Route::get('/reset_password', 'App\Http\Controllers\LoginController@resetPassword');
+Route::post('/send-email', 'App\Http\Controllers\LoginController@sendEmail');
+Route::get('/email_confirm', function () {
+    return view('EmailSendConfirm');
+});
+Route::post('/password_reset', 'App\Http\Controllers\LoginController@passwordReset');
 
 //user management
 Route::get('/admin/adduser', 'App\Http\Controllers\UserController@create');
@@ -35,6 +42,8 @@ Route::get('/admin/update_user/{id}', 'App\Http\Controllers\UserController@edit'
 Route::post('/admin/edit_user/{id}', 'App\Http\Controllers\UserController@update');
 Route::get('/admin/deleteuser/{id}', 'App\Http\Controllers\UserController@destroy');
 Route::post('/check_uname','App\Http\Controllers\UserController@check_uname');
+
+Route::post('/admin/updateProfile/{id}', 'App\Http\Controllers\UserController@updateProfile');
 
 //Creditor management
 Route::get('/admin/addcreditor', 'App\Http\Controllers\CreditorController@create');
@@ -70,16 +79,20 @@ Route::get('/autocomplete2-searchloanbycreditor','App\Http\Controllers\Collector
 Route::post('/serch_by_creditor_nic','App\Http\Controllers\CollectorController@serch_by_creditor_nic');
 Route::get('/admin/dailycollectionbyloan_id/{id}', 'App\Http\Controllers\CollectorController@dailycollectionbyloan_id');
 
-
+Route::get('/web/daily_collection_by_cre_id/{id}', 'App\Http\Controllers\CollectorController@daily_collection_by_cre_id');
 
 
 //reports
 Route::get('/admin/view_daily_collection', 'App\Http\Controllers\CollectorController@view_daily_collections');
 Route::get('/autocomplete2-searchCollector','App\Http\Controllers\CollectorController@searchCollector');
 Route::post('/serch_by_collector_id','App\Http\Controllers\CollectorController@serch_by_collector_id');
-
 Route::get('/admin/view_loan_outstanding','App\Http\Controllers\ReportController@view_loan_outstanding');
 Route::get('/admin/outstanding_by_loan_id/{id}','App\Http\Controllers\ReportController@outstanding_by_loan_id');
+Route::get('/admin/monthlyCollection','App\Http\Controllers\ReportController@monthlyCollection');
+
+Route::get('/admin/issuedLoanDaily','App\Http\Controllers\ReportController@issuedLoanDaily');
+Route::get('/admin/todayDailyCollection','App\Http\Controllers\ReportController@todayDailyCollection');
+Route::get('/admin/todayActiveCreditors','App\Http\Controllers\ReportController@todayActiveCreditors');
 
 
 

@@ -260,5 +260,6 @@ class LoanController extends Controller
         ->get();
         return response()->json( $data, 200 );
     }
+ 
     
 }
